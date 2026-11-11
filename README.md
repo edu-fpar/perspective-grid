@@ -8,15 +8,31 @@ d’éléments** : courants, théories, acteurs, époques, cultures… Chaque po
 Application web statique, 100 % côté navigateur, sans étape de build : même pile que `micro-learning-app`
 (Bootstrap 5.3, Bootstrap Icons, marked, JavaScript sans framework, `localStorage`).
 
+**▶ Essayer :** https://edu-fpar.github.io/perspective-grid/ &nbsp;·&nbsp; [Format de fichier](docs/FORMAT.md) &nbsp;·&nbsp; [Skills pour les IA](#skills-ia)
+
+![Trois courants comparés : « La place de l’enseignant » est au rang 2, 3 et 5 selon le courant ; les autres éléments restent estompés (dévoilement progressif)](regards-croises-fr.png)
+
 ## Démarrer
+
+**En ligne** : ouvrez le lien ci-dessus. Exemples directs :
+[courants pédagogiques](https://edu-fpar.github.io/perspective-grid/?ex=courants-pedagogiques) ·
+[éthiques et IA](https://edu-fpar.github.io/perspective-grid/?ex=ethiques-ia) ·
+[éthiques et IA, à partir de zéro, élément par élément](https://edu-fpar.github.io/perspective-grid/?ex=ethiques-ia&stage=zero&spot=1&order=element).
+
+**En local, avec Firefox** : ouvrez les outils de développement et ajoutez le dossier du projet : Firefox
+sert alors les fichiers comme un serveur web. Rien à installer.
+
+**En local, solution de secours** : n’importe quel serveur web statique, par exemple Python :
 
 ```bash
 python -m http.server 8771 --bind 127.0.0.1
 ```
 
-Puis ouvrir <http://127.0.0.1:8771/>. L’application fonctionne aussi depuis UwAmp/Apache, GitHub Pages ou
-tout hébergement statique. Ouverte directement depuis le disque (`file://`), tout marche sauf le chargement
-d’un fichier en ligne (`?src=`).
+Puis ouvrir <http://127.0.0.1:8771/>. L’application fonctionne aussi depuis UwAmp/Apache ou tout hébergement
+statique. Ouverte directement depuis le disque (`file://`), tout marche sauf le chargement d’un fichier en
+ligne (`?src=`).
+
+**Publier votre propre copie** : faites un fork du dépôt et activez GitHub Pages (branche `main`, dossier racine).
 
 ## Utilisation
 
