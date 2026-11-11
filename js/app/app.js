@@ -300,6 +300,9 @@
     $('act-undo').addEventListener('click', undo);
     $('act-redo').addEventListener('click', redo);
     $('act-keys').addEventListener('click', shortcuts);
+    var lg = PG.i18n.lang() === 'fr' ? 'fr' : 'en';
+    $('link-docs').href = 'docs/index.html?lang=' + lg;
+    $('link-ai').href = 'docs/index.html?lang=' + lg + '#' + (lg === 'fr' ? 'fr-ia' : 'en-ai');
     $('warn-btn').addEventListener('click', warningsDialog);
     $('history').addEventListener('show.bs.offcanvas', PG.io.renderHistory);
     $('doc-intro-btn').addEventListener('click', function () {

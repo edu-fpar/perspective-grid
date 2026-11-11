@@ -8,9 +8,24 @@ d’éléments** : courants, théories, acteurs, époques, cultures… Chaque po
 Application web statique, 100 % côté navigateur, sans étape de build : même pile que `micro-learning-app`
 (Bootstrap 5.3, Bootstrap Icons, marked, JavaScript sans framework, `localStorage`).
 
-**▶ Essayer :** https://edu-fpar.github.io/perspective-grid/ &nbsp;·&nbsp; [Format de fichier](docs/FORMAT.md) &nbsp;·&nbsp; [Skills pour les IA](#skills-ia)
+**▶ Essayer :** https://edu-fpar.github.io/perspective-grid/ &nbsp;·&nbsp; [Documentation](https://edu-fpar.github.io/perspective-grid/docs/?lang=fr) ([English](https://edu-fpar.github.io/perspective-grid/docs/?lang=en)) &nbsp;·&nbsp; [Page pour les IA](docs/skill.md) &nbsp;·&nbsp; [Format de fichier](docs/FORMAT.md)
 
-![Trois courants comparés : « La place de l’enseignant » est au rang 2, 3 et 5 selon le courant ; les autres éléments restent estompés (dévoilement progressif)](regards-croises-fr.png)
+![Trois courants comparés : « La place de l’enseignant » est au rang 2, 3 et 5 selon le courant ; les autres éléments restent estompés (dévoilement progressif)](docs/images/comparaison-devoilement-fr.png)
+
+## Créer une grille avec une IA
+
+Pas besoin d’apprendre la syntaxe. Donnez à n’importe quelle IA (ChatGPT, Claude, Gemini, Mistral, Copilot…)
+l’adresse de la page d’instructions et votre contenu :
+
+> Lis les instructions sur https://edu-fpar.github.io/perspective-grid/docs/skill.md. Dis-moi si le cours
+> suivant se prête à une grille « Regards croisés » et, si oui, produis le fichier. Public : étudiants de
+> première année, 4 à 6 points de vue. [collez ici votre cours, votre plan ou vos notes]
+
+L’IA dit d’abord si l’outil est adapté, puis donne un bloc de Markdown à coller dans l’application
+(*Fichier › Coller du Markdown*, ou Ctrl+V sur la page). Version anglaise : [docs/skill-en.md](docs/skill-en.md).
+Le fichier [`llms.txt`](llms.txt) à la racine indique ces pages aux IA.
+
+![Quatre amis comparés en thème sombre : le Japon est 2ᵉ pour Léa, 4ᵉ pour Karim, 1ᵉʳ pour Tom et absent chez Sofia](docs/images/comparaison-absence-sombre-fr.png)
 
 ## Démarrer
 
@@ -116,7 +131,10 @@ Par défaut, les colonnes ont une largeur adaptée à des cartes avec du texte. 
 dans Éditer › Titre et présentation : les colonnes sont plus serrées, et deux tiennent sur un écran de
 téléphone. `columns: wide` donne des colonnes plus larges.
 
-## Skills (IA)
+## Skills pour Claude Code (développeurs)
+
+Pour une IA quelconque, la [page d’instructions](docs/skill.md) suffit. Les deux skills ci-dessous sont destinées
+à Claude Code et travaillent dans le dépôt (validation automatique avec le parseur) :
 
 | Skill | Rôle |
 |---|---|
@@ -147,7 +165,10 @@ js/app/io.js          import / aperçu, export versionné, partage, historique
 js/app/stage.js       modes de présentation, fenêtre présentateur
 js/app/app.js         état, sauvegarde auto, barre d’outils, réglages, badges
 examples/             grilles d’exemple (.md)
+docs/index.html       documentation (FR / EN)
+docs/skill.md         instructions pour les IA (FR) ; skill-en.md (EN)
 docs/FORMAT.md        spécification du format
+docs/images/          captures d’écran
 skills/               skills detect et format
 tests/                tests node:test
 tools/                validate.js, build-samples.js

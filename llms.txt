@@ -1,0 +1,15 @@
+# Regards croisés (Perspective Grid)
+
+> Outil 100 % navigateur qui montre comment plusieurs points de vue (courants, théories, acteurs, cultures, personnes) hiérarchisent différemment un même ensemble d'éléments, à partir d'un fichier Markdown (format perspective-grid/v1).
+
+## Pour les IA
+
+- [Skill : créer une grille Regards croisés à partir d'un cours (FR)](docs/skill.md): quand l'outil est pertinent, syntaxe exacte, règles de classement, exemple complet.
+- [Skill: build a perspective grid from course content (EN)](docs/skill-en.md): when the tool fits, exact syntax, ranking rules, complete example.
+- [Format specification (EN)](docs/FORMAT.md): the reference for the file format.
+
+## Pour les humains
+
+- [Application](https://edu-fpar.github.io/perspective-grid/)
+- [Documentation (FR)](docs/index.html?lang=fr)
+- [Documentation (EN)](docs/index.html?lang=en)

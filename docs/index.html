@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="fr" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Documentation — Regards croisés</title>
+  <meta name="description" content="Regards croisés / Perspective Grid documentation (FR/EN): build a grid with an AI, read and compare perspectives, present without overload, edit, share.">
+  <meta property="og:title" content="Documentation — Regards croisés">
+  <meta property="og:description" content="Comparez comment plusieurs points de vue hiérarchisent les mêmes éléments. Compare how several perspectives rank the same elements.">
+  <script>
+    (function () {
+      var pref = 'auto';
+      try { pref = JSON.parse(localStorage.getItem('pg.theme')) || 'auto'; } catch (e) { /* ignore */ }
+      var dark = pref === 'dark' || (pref === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+    })();
+  </script>
+  <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <style>
+    body.docs { display: block; overflow: auto; background: var(--pg-bg); }
+    .docs-main { max-width: 920px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    .docs-main[hidden] { display: none; }
+    .docs-main h2 { font-weight: 800; margin-top: 2.6rem; padding-top: .5rem; font-size: 1.45rem; scroll-margin-top: 1rem; }
+    .docs-main h2 i { color: var(--pg-accent); }
+    .docs-main h3 { font-size: 1.05rem; font-weight: 700; margin-top: 1.3rem; }
+    .docs-card { background: var(--pg-head-bg); border-radius: 16px; padding: 1.3rem 1.5rem; border: 1px solid var(--bs-border-color); }
+    .docs-card + .docs-card { margin-top: 1rem; }
+    .docs-main pre { background: #1e1d33; color: #e8e6ff; border-radius: 12px; padding: 1rem; font-size: .84rem; white-space: pre-wrap; }
+    .docs-toc a { text-decoration: none; }
+    .docs-toc ol { columns: 2; column-gap: 2rem; }
+    @media (max-width: 575px) { .docs-toc ol { columns: 1; } }
+    .ai-box { background: linear-gradient(135deg, #2a2752, #4b2fb8); color: #fff; border-radius: 20px; padding: 1.5rem; }
+    .ai-box code { color: #ffd166; word-break: break-all; }
+    .ai-box a { color: #fff; }
+    .ai-prompt { background: rgba(255,255,255,.1); border-radius: 12px; padding: .9rem 1rem; font-size: .95rem; }
+    .pg-brand small { white-space: nowrap; }
+    .doc-lang { flex: none; display: flex; background: rgba(255,255,255,.08); border-radius: 10px; padding: 3px; }
+    .doc-lang button { border: 0; background: none; color: rgba(255,255,255,.75); padding: .25rem .7rem; border-radius: 8px; font-weight: 700; font-size: .85rem; }
+    .doc-lang button[aria-pressed="true"] { background: #fff; color: var(--pg-nav); }
+    .docs-shot { margin: 1.25rem 0 0; }
+    .docs-shot img { display: block; max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 10px 30px rgba(30, 20, 80, .18); }
+    .docs-shot figcaption { font-size: .85rem; color: var(--bs-secondary-color); margin-top: .6rem; text-align: center; }
+    .docs-table td, .docs-table th { vertical-align: top; }
+    .state-demo { display: inline-block; width: 1.4rem; height: 1rem; border-radius: 4px; vertical-align: -2px; margin-right: .35rem; border: 1px solid var(--bs-border-color); }
+    .sd-primary { background: var(--bs-primary-bg-subtle); border-left: 5px solid var(--bs-primary-text-emphasis); }
+    .sd-success { background: var(--bs-success-bg-subtle); border-left: 4px solid var(--bs-success-text-emphasis); }
+    .sd-warning { background: var(--bs-warning-bg-subtle); border-left: 4px dashed var(--bs-warning-text-emphasis); }
+    .sd-danger { background: var(--bs-danger-bg-subtle); border-left: 5px double var(--bs-danger-text-emphasis); }
+    .sd-muted { background: var(--bs-tertiary-bg); border-left: 4px dotted var(--bs-secondary-color); }
+    .tip { border-left: 4px solid var(--pg-accent); background: var(--bs-tertiary-bg); padding: .6rem .9rem; border-radius: 0 10px 10px 0; font-size: .92rem; margin-top: 1rem; }
+    kbd { white-space: nowrap; }
+  </style>
+</head>
+<body class="docs">
+  <nav class="pg-nav">
+    <a class="pg-brand" href="../index.html"><span class="logo" aria-hidden="true"><i class="bi bi-layout-three-columns"></i></span><span>Regards croisés <small class="opacity-75 fw-normal">Docs</small></span></a>
+    <a class="btn btn-sm btn-pg ms-auto" href="../index.html"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> <span class="js-open-app pg-hide-sm">Ouvrir l’application</span><span class="visually-hidden pg-show-sm-sr js-open-app">Ouvrir l’application</span></a>
+    <div class="doc-lang ms-2" role="group" aria-label="Langue / Language">
+      <button type="button" data-doc-lang="fr" lang="fr" aria-pressed="true" title="Français">FR</button>
+      <button type="button" data-doc-lang="en" lang="en" aria-pressed="false" title="English">EN</button>
+    </div>
+  </nav>
+
+  <!-- =================================================================== FRANÇAIS -->
+  <main class="docs-main" data-lang="fr" lang="fr" data-skill="skill.md">
+    <h1 class="fw-bold">Documentation</h1>
+    <p class="lead text-body-secondary">Regards croisés montre <strong>comment plusieurs points de vue hiérarchisent différemment un même ensemble d’éléments</strong> : courants de pensée, théories, acteurs, époques, cultures, ou simplement des personnes. Chaque point de vue est une colonne, ses éléments y sont classés du plus au moins important, et l’on compare.</p>
+
+    <div class="docs-card docs-toc">
+      <strong>Sommaire</strong>
+      <ol class="mb-0 mt-2">
+        <li><a href="#fr-ia">Créer une grille avec une IA</a></li>
+        <li><a href="#fr-demarrer">Démarrer</a></li>
+        <li><a href="#fr-lire">Lire une grille</a></li>
+        <li><a href="#fr-comparer">Comparer des points de vue</a></li>
+        <li><a href="#fr-presenter">Présenter sans surcharger</a></li>
+        <li><a href="#fr-annoter">Annoter en direct</a></li>
+        <li><a href="#fr-editer">Modifier une grille</a></li>
+        <li><a href="#fr-fichiers">Charger, enregistrer, versions</a></li>
+        <li><a href="#fr-partager">Partager</a></li>
+        <li><a href="#fr-format">Le format de fichier</a></li>
+        <li><a href="#fr-affichage">Affichage, clavier, accessibilité</a></li>
+      </ol>
+    </div>
+
+    <h2 id="fr-ia"><i class="bi bi-robot" aria-hidden="true"></i> 1. Créer une grille avec une IA</h2>
+    <div class="ai-box">
+      <p>Pas besoin d’apprendre la syntaxe : n’importe quelle IA (ChatGPT, Claude, Gemini, Mistral, Copilot…) peut transformer votre cours en grille. Donnez-lui l’adresse de la <strong>page d’instructions pour IA</strong> :</p>
+      <p class="mb-2"><code class="js-skill-url">docs/skill.md</code>
+        <button type="button" class="btn btn-sm btn-light ms-2" data-copy=".js-skill-url"><i class="bi bi-clipboard" aria-hidden="true"></i> Copier l’adresse</button>
+        <a class="btn btn-sm btn-outline-light ms-1" href="skill.md" target="_blank" rel="noopener"><i class="bi bi-eye" aria-hidden="true"></i> Voir la page</a></p>
+      <p class="mt-3 mb-1">Puis écrivez par exemple :</p>
+      <div class="ai-prompt js-prompt">Lis les instructions sur <span class="js-url">docs/skill.md</span>. Dis-moi si le cours suivant se prête à une grille « Regards croisés » et, si oui, produis le fichier. Public : étudiants de première année, 4 à 6 points de vue.<br>[collez ici votre cours, votre plan ou vos notes]</div>
+      <button type="button" class="btn btn-sm btn-light mt-2" data-copy=".js-prompt"><i class="bi bi-clipboard" aria-hidden="true"></i> Copier la consigne</button>
+      <p class="mt-3 mb-1">L’IA commence par dire si l’outil est adapté (il ne l’est pas pour une chronologie, une procédure ou une simple opposition pour / contre), puis donne un bloc de Markdown. Copiez-le, et dans l’<a href="../index.html">application</a> choisissez <em>Fichier › Coller du Markdown</em> (ou faites simplement <kbd>Ctrl</kbd>+<kbd>V</kbd> sur la page) : un aperçu s’affiche, avec d’éventuels avertissements, avant de remplacer la grille.</p>
+      <div class="small mt-3 opacity-75 js-local" hidden>
+        <i class="bi bi-info-circle" aria-hidden="true"></i> Cette documentation est ouverte depuis votre ordinateur : une IA en ligne ne pourra pas lire cette adresse. Utilisez l’adresse publique <code>https://edu-fpar.github.io/perspective-grid/docs/skill.md</code>, ou le bouton ci-dessous, et collez le texte au début de votre message.
+      </div>
+      <button type="button" class="btn btn-sm btn-warning mt-2 js-copy-skill"><i class="bi bi-file-earmark-text" aria-hidden="true"></i> Copier toutes les instructions (pour les IA sans accès web)</button>
+      <p class="small mt-3 mb-0 opacity-75">Pour un cours en anglais : <a href="skill-en.md" target="_blank" rel="noopener">version anglaise de la page</a>. Les développeurs trouveront aussi deux skills pour Claude Code dans le dossier <code>skills/</code> du dépôt (repérage des passages pertinents, puis mise au format avec validation automatique).</p>
+    </div>
+
+    <h2 id="fr-demarrer"><i class="bi bi-rocket-takeoff" aria-hidden="true"></i> 2. Démarrer</h2>
+    <div class="docs-card">
+      <ol class="mb-2">
+        <li class="mb-2"><strong>Ouvrez</strong> l’<a href="../index.html">application</a>. Un exemple est chargé au premier lancement ; le menu <i class="bi bi-journal-text" aria-hidden="true"></i> <em>Exemples</em> en propose trois : les courants pédagogiques, éthiques et IA, et le voyage de fin d’année (le plus simple pour découvrir l’outil).</li>
+        <li class="mb-2"><strong>Chargez votre grille</strong> : <em>Fichier › Ouvrir un fichier .md</em>, glissez le fichier sur la page, ou collez le Markdown produit par une IA.</li>
+        <li><strong>Explorez</strong> : touchez un élément pour lire son détail, cochez <em>Comparer</em> sur deux colonnes, puis touchez un élément pour voir son rang ailleurs.</li>
+      </ol>
+      <p class="mb-0 small text-body-secondary">Tout reste dans votre navigateur : rien n’est envoyé à un serveur. Votre travail est enregistré automatiquement sur cet appareil (<i class="bi bi-cloud-check" aria-hidden="true"></i> <em>Enregistré</em> en haut à droite).</p>
+    </div>
+
+    <h2 id="fr-lire"><i class="bi bi-layout-three-columns" aria-hidden="true"></i> 3. Lire une grille</h2>
+    <div class="docs-card">
+      <ul>
+        <li><strong>Une colonne = un point de vue.</strong> Son en-tête (la carte du haut) donne son nom, un sous-titre (auteurs, époque, profil…), une phrase qui le résume et, avec <em>En savoir plus</em>, une description détaillée.</li>
+        <li><strong>L’ordre des cartes est le rang</strong> : le petit numéro indique la place de l’élément <em>pour ce point de vue</em>. Le n° 1 est ce qui compte le plus pour lui.</li>
+        <li><strong>Toucher une carte</strong> ouvre son détail : ce que l’élément signifie pour ce point de vue. Quand l’élément a aussi une description générale, elle est proposée en dessous.</li>
+        <li><strong>Le même élément</strong> peut apparaître dans plusieurs colonnes, à des rangs différents ; il peut aussi manquer : c’est tout l’intérêt de la comparaison.</li>
+        <li>Une <strong>case vide</strong> sert seulement à aligner visuellement ; elle ne compte pas dans les rangs.</li>
+      </ul>
+      <h3>Les états (couleurs)</h3>
+      <p>Chaque état combine une couleur, une icône et un style de bordure : il reste lisible sans les couleurs, et il est annoncé par les lecteurs d’écran.</p>
+      <table class="table table-sm docs-table">
+        <thead><tr><th>État</th><th>Repère visuel</th><th>Sens habituel</th></tr></thead>
+        <tbody>
+          <tr><td><span class="state-demo sd-primary"></span>Mis en avant</td><td><i class="bi bi-star-fill" aria-hidden="true"></i> bordure épaisse</td><td>Idée-clé du point de vue</td></tr>
+          <tr><td><span class="state-demo sd-success"></span>Valorisé</td><td><i class="bi bi-check-circle-fill" aria-hidden="true"></i> bordure pleine</td><td>Favorable, valorisé</td></tr>
+          <tr><td><span class="state-demo sd-warning"></span>Nuancé, discuté</td><td><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> bordure tiretée</td><td>Débattu, à nuancer</td></tr>
+          <tr><td><span class="state-demo sd-danger"></span>Rejeté, opposé</td><td><i class="bi bi-x-circle-fill" aria-hidden="true"></i> bordure double</td><td>Refusé, combattu</td></tr>
+          <tr><td><span class="state-demo sd-muted"></span>Secondaire, écarté</td><td><i class="bi bi-dash-circle" aria-hidden="true"></i> pointillés, texte barré</td><td>Laissé de côté</td></tr>
+        </tbody>
+      </table>
+      <h3>Les badges</h3>
+      <p class="mb-2">Un badge qualifie la <strong>relation</strong> du point de vue à l’élément. Il s’affiche en pied de carte (sur téléphone, seule l’icône est visible : touchez-la pour lire le mot).</p>
+      <p class="mb-0"><i class="bi bi-bullseye" aria-hidden="true"></i> central · <i class="bi bi-check2-circle" aria-hidden="true"></i> accepté · <i class="bi bi-graph-up-arrow" aria-hidden="true"></i> surévalué · <i class="bi bi-graph-down-arrow" aria-hidden="true"></i> sous-évalué · <i class="bi bi-patch-question" aria-hidden="true"></i> contesté · <i class="bi bi-x-octagon" aria-hidden="true"></i> rejeté · <i class="bi bi-eye-slash" aria-hidden="true"></i> ignoré · <i class="bi bi-slash-circle" aria-hidden="true"></i> nié · <i class="bi bi-tools" aria-hidden="true"></i> instrumentalisé. Un fichier peut déclarer ses propres badges (par exemple <i class="bi bi-bank" aria-hidden="true"></i> culture, <i class="bi bi-bicycle" aria-hidden="true"></i> sport dans l’exemple du voyage).</p>
+    </div>
+
+    <h2 id="fr-comparer"><i class="bi bi-intersect" aria-hidden="true"></i> 4. Comparer des points de vue</h2>
+    <div class="docs-card">
+      <ol>
+        <li class="mb-2"><strong>Sélectionnez au moins deux colonnes</strong> : case <em>Comparer</em> de l’en-tête, ou toucher l’en-tête. Le bouton <em>Tout</em> les sélectionne toutes, <em>Effacer</em> vide la sélection.</li>
+        <li class="mb-2"><strong>Touchez un élément</strong> : il devient la <em>référence</em>. Dans les autres colonnes sélectionnées, le même élément est encadré, avec son écart de rang : <span class="badge text-bg-success">↑ rang 2 → rang 1</span> (plus important ici), <span class="badge text-bg-danger">↓ rang 2 → rang 4</span> (moins important), <span class="badge text-bg-secondary">même rang</span>.</li>
+        <li class="mb-2"><strong>Absent ?</strong> Un cadre en pointillés en haut de la colonne l’indique : « Japon est absent de ce point de vue ».</li>
+        <li>Sur ordinateur, des <strong>lignes de liaison</strong> relient les cartes du même élément (désactivables dans les réglages).</li>
+      </ol>
+      <figure class="docs-shot"><img src="images/comparaison-absence-sombre-fr.png" alt="Quatre amis comparés, thème sombre : le Japon est 2e pour Léa, 4e pour Karim, 1er pour Tom et absent chez Sofia" loading="lazy" width="1059" height="878"><figcaption>Le Japon pris comme référence chez Léa (rang 2) : 4e chez Karim, 1er chez Tom, absent chez Sofia (thème sombre).</figcaption></figure>
+      <h3>Vue « Comparer » (téléphone)</h3>
+      <p>Avec deux colonnes sélectionnées, le bouton <i class="bi bi-layout-split" aria-hidden="true"></i> <em>Comparer</em> n’affiche qu’elles, côte à côte, en version compacte (titres seuls) : idéal sur un téléphone.</p>
+      <h3>Rapprocher deux colonnes</h3>
+      <p class="mb-0">Pour comparer deux colonnes éloignées, déplacez-en une : flèches <i class="bi bi-arrow-left" aria-hidden="true"></i> <i class="bi bi-arrow-right" aria-hidden="true"></i> de l’en-tête, poignée <i class="bi bi-arrows-move" aria-hidden="true"></i> à glisser sur ordinateur, ou <kbd>Alt</kbd>+<kbd>←</kbd>/<kbd>→</kbd>. Ce nouvel ordre est enregistré dans la grille.</p>
+    </div>
+
+    <h2 id="fr-presenter"><i class="bi bi-easel" aria-hidden="true"></i> 5. Présenter sans surcharger</h2>
+    <div class="docs-card">
+      <p>Une grille complète affichée d’un coup est riche… et peut décourager. Le menu <i class="bi bi-easel" aria-hidden="true"></i> <strong>Présenter</strong> propose des modes qui guident le regard. Ils ne modifient jamais le fichier et se mettent en pause pendant l’édition.</p>
+      <table class="table table-sm docs-table">
+        <tbody>
+          <tr><th scope="row" class="text-nowrap">À la une</th><td>Une seule colonne est active (bordure dorée), les autres sont grisées ; toucher une colonne grisée la met à la une. Dans la colonne active, l’élément ouvert ressort et les autres s’estompent.</td></tr>
+          <tr><th scope="row" class="text-nowrap">Progressif</th><td>Les cartes restent floues, sans couleur d’état (elle trahirait la réponse), jusqu’à ce qu’on les touche.</td></tr>
+          <tr><th scope="row" class="text-nowrap">À partir de zéro</th><td>Seuls le premier en-tête et la forme des cartes sont visibles ; on fait apparaître les contenus un par un.</td></tr>
+        </tbody>
+      </table>
+      <p>« À la une » se combine avec les deux modes de dévoilement. Le bouton <strong>Suivant</strong> de la barre du bas dévoile la suite dans l’ordre choisi :</p>
+      <ul>
+        <li><strong>Colonne par colonne</strong> : l’en-tête, puis les éléments du n° 1 au dernier ; la colonne active suit.</li>
+        <li><strong>Rang par rang</strong> : tous les n° 1, puis tous les n° 2…</li>
+        <li><strong>Élément par élément</strong> : un même élément apparaît d’un coup dans toutes les colonnes. Avec « À la une », cette « ligne » est mise en valeur : on voit par exemple « La place de l’enseignant » s’allumer au rang 3, 5, 2, 3…</li>
+      </ul>
+      <figure class="docs-shot"><img src="images/comparaison-devoilement-fr.png" alt="Dévoilement progressif : trois courants comparés, les cartes non dévoilées restent floues, la barre de présentation est en bas" loading="lazy" width="1146" height="972"><figcaption>Dévoilement progressif et comparaison : les cartes pas encore dévoilées restent floues ; la barre du bas affiche « Suivant » et la progression.</figcaption></figure>
+      <h3>La barre de présentation</h3>
+      <ul>
+        <li><i class="bi bi-chevron-left" aria-hidden="true"></i> revient en arrière, <strong>Suivant</strong> dévoile la suite, le compteur indique la progression (« 12 / 56 dévoilés »).</li>
+        <li><i class="bi bi-incognito" aria-hidden="true"></i> <strong>Aperçu</strong> affiche discrètement l’étape suivante. À n’activer que si cet écran n’est pas projeté.</li>
+        <li><i class="bi bi-skip-start" aria-hidden="true"></i> recommence, <i class="bi bi-eye" aria-hidden="true"></i> dévoile tout, <i class="bi bi-x-lg" aria-hidden="true"></i> quitte la présentation.</li>
+        <li>Une <strong>télécommande de présentation</strong> fonctionne directement (touches Page suivante / Page précédente), de même que <kbd>N</kbd> / <kbd>P</kbd>.</li>
+      </ul>
+      <h3>La fenêtre présentateur</h3>
+      <p class="mb-0"><i class="bi bi-window-split" aria-hidden="true"></i> ouvre une seconde fenêtre, à garder sur l’écran de l’ordinateur pendant que la grille est projetée (écran étendu). Elle montre ce qui va être dévoilé avec ses notes (détail, état, badges), ce qui vient de l’être, le déroulé complet (touchez une étape pour y aller directement) et une vue d’ensemble où ce qui est encore masqué est grisé. Ses boutons pilotent la projection. Les deux fenêtres doivent être ouvertes dans le même navigateur ; si la fenêtre ne s’ouvre pas, autorisez les fenêtres surgissantes pour ce site.</p>
+    </div>
+
+    <h2 id="fr-annoter"><i class="bi bi-brush" aria-hidden="true"></i> 6. Annoter en direct</h2>
+    <div class="docs-card">
+      <p>Même en consultation, le formateur peut annoter la grille devant le groupe :</p>
+      <ul class="mb-0">
+        <li><strong>Changer l’état</strong> : petit bouton rond à droite de chaque carte (menu de 6 états), ou touches <kbd>1</kbd> à <kbd>6</kbd> sur la carte sélectionnée.</li>
+        <li><strong>Ajouter un badge</strong> : par le même menu (partie <em>Badges</em>), ou avec le <i class="bi bi-tags" aria-hidden="true"></i> <strong>tiroir de badges</strong> : sur ordinateur, glissez un badge sur une carte ; sur téléphone, touchez un badge puis les cartes à annoter, et <em>Terminer</em>.</li>
+        <li>Ces annotations modifient la grille (elles sont enregistrées et exportées). Pour revenir en arrière : <kbd>Ctrl</kbd>+<kbd>Z</kbd>, ou l’historique des versions.</li>
+      </ul>
+    </div>
+
+    <h2 id="fr-editer"><i class="bi bi-pencil-square" aria-hidden="true"></i> 7. Modifier une grille</h2>
+    <div class="docs-card">
+      <p>Le bouton <strong>Éditer</strong> (ou la touche <kbd>E</kbd>) active le mode édition, pensé pour l’ordinateur mais utilisable sur téléphone. Une barre jaune le signale ; <em>Terminer</em> en sort.</p>
+      <ul>
+        <li><strong>Modifier un texte</strong> : double-clic sur un titre, un sous-titre ou une description courte ; <kbd>Entrée</kbd> valide, <kbd>Échap</kbd> annule.</li>
+        <li><strong>Réordonner</strong> : glissez la poignée <i class="bi bi-grip-vertical" aria-hidden="true"></i> d’une carte (appui long sur téléphone), ou <kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd>.</li>
+        <li><strong>Ajouter un élément</strong> : bouton <i class="bi bi-plus" aria-hidden="true"></i> entre deux cartes (l’élément est inséré à cette place) ou en bas de colonne.</li>
+        <li><strong>Formulaire complet</strong> : crayon <i class="bi bi-pencil" aria-hidden="true"></i> d’une carte, ou <kbd>F2</kbd>. On y règle le titre, la <strong>clé</strong>, l’état, les badges et le détail.</li>
+        <li><strong>Colonnes</strong> : <em>Modifier le point de vue</em> dans l’en-tête ; le menu <i class="bi bi-three-dots-vertical" aria-hidden="true"></i> permet aussi d’ajouter une case vide, de dupliquer ou de supprimer la colonne ; <em>Ajouter un point de vue</em> dans la barre jaune.</li>
+        <li><strong>Titre et présentation</strong> : titre, sous-titre, texte « À propos », auteur, source et <strong>largeur des colonnes</strong> (étroites pour des cartes d’un seul mot ou nom, deux colonnes par écran de téléphone).</li>
+        <li><strong>Annuler / rétablir</strong> : <kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd>, ou les flèches de la barre jaune.</li>
+      </ul>
+      <div class="tip"><strong>La clé, c’est ce qui relie les colonnes.</strong> Deux cartes qui ont la même clé sont « le même élément » vu par deux points de vue : c’est elle qui permet la comparaison. Dans le formulaire, le champ <em>Clé</em> propose les clés existantes et indique dans quelles colonnes l’élément apparaît déjà. Laissez le titre vide pour reprendre le titre commun, ou écrivez un titre propre à ce point de vue.</div>
+      <p class="mt-3 mb-0">Pour les modifications en masse, <em>Fichier › Voir / modifier le Markdown</em> ouvre la source complète, avec aperçu avant d’appliquer.</p>
+    </div>
+
+    <h2 id="fr-fichiers"><i class="bi bi-folder2-open" aria-hidden="true"></i> 8. Charger, enregistrer, versions</h2>
+    <div class="docs-card">
+      <h3 class="mt-0">Charger</h3>
+      <p>Quatre façons : <em>Fichier › Ouvrir un fichier .md</em> ; glisser un fichier sur la page ; coller du Markdown (<em>Fichier › Coller du Markdown</em>, ou <kbd>Ctrl</kbd>+<kbd>V</kbd> sur la page) ; <em>Fichier › Ouvrir depuis une adresse</em>. Dans tous les cas, un <strong>aperçu</strong> montre la grille miniature, ses chiffres et les <strong>avertissements</strong> de lecture (clé manquante, état inconnu…) avant de remplacer la grille actuelle. Le fichier n’a pas besoin d’être parfait : l’application corrige ce qu’elle peut et explique ce qu’elle a fait.</p>
+      <h3>Enregistrement et historique</h3>
+      <p>La grille est enregistrée automatiquement dans le navigateur. <em>Fichier › Créer une version</em> (<kbd>Ctrl</kbd>+<kbd>S</kbd>) garde une copie nommée ; une sauvegarde automatique est aussi faite avant chaque remplacement (import, exemple, restauration). <em>Fichier › Historique des versions</em> permet de restaurer, renommer, télécharger ou supprimer une version.</p>
+      <div class="tip">Le stockage du navigateur est propre à cet appareil et à ce navigateur, et peut être effacé (navigation privée, nettoyage). <strong>Exportez régulièrement</strong> vos grilles en fichiers <code>.md</code>.</div>
+      <h3>Exporter</h3>
+      <p class="mb-0"><em>Fichier › Exporter en Markdown</em> crée un <strong>nouveau fichier</strong> : la version est incrémentée, la version d’origine est notée (« basée sur ») avec la date, et le nom se termine par <code>-v2.md</code>, <code>-v3.md</code>… L’original n’est jamais écrasé. On peut aussi copier le Markdown dans le presse-papiers.</p>
+    </div>
+
+    <h2 id="fr-partager"><i class="bi bi-share" aria-hidden="true"></i> 9. Partager</h2>
+    <div class="docs-card">
+      <p><em>Fichier › Lien de partage</em> propose deux sortes de liens :</p>
+      <ul>
+        <li><strong>Lien autonome</strong> : toute la grille est compressée dans le lien ; rien n’est envoyé à un serveur. Pratique pour un message ou un QR code, tant que la grille reste courte.</li>
+        <li><strong>Lien vers un fichier en ligne</strong> : déposez le <code>.md</code> sur un site public (GitHub, ENT, site de l’établissement) et collez son adresse ; le lien affichera toujours la dernière version du fichier.</li>
+      </ul>
+      <p>Deux cases permettent d’ouvrir le lien avec les colonnes déjà sélectionnées et dans le mode de présentation en cours (par exemple « à partir de zéro »).</p>
+      <h3>Paramètres d’adresse</h3>
+      <table class="table table-sm docs-table mb-0">
+        <tbody>
+          <tr><td><code>?src=https://…/grille.md</code></td><td>Charge un fichier en ligne (le site doit autoriser la lecture, comme GitHub et son lien « Raw »).</td></tr>
+          <tr><td><code>?ex=courants-pedagogiques</code>, <code>ethiques-ia</code>, <code>voyage-fin-d-annee</code></td><td>Ouvre un exemple.</td></tr>
+          <tr><td><code>&amp;cols=id1,id2</code></td><td>Présélectionne des colonnes ; <code>&amp;compact=1</code> ouvre la vue « Comparer ».</td></tr>
+          <tr><td><code>&amp;spot=1</code></td><td>Mode « À la une ».</td></tr>
+          <tr><td><code>&amp;stage=veil</code> / <code>zero</code></td><td>Dévoilement progressif / à partir de zéro ; <code>&amp;order=column</code>, <code>rank</code> ou <code>element</code> pour l’ordre.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="fr-format"><i class="bi bi-markdown" aria-hidden="true"></i> 10. Le format de fichier</h2>
+    <div class="docs-card">
+      <p>Une grille est un simple fichier texte Markdown, lisible par un humain et facile à produire par une IA :</p>
+<pre>---
+format: perspective-grid/v1
+title: Le voyage de fin d’année
+lang: fr
+version: 1
+based_on: null
+updated: 2026-11-11
+---
+
+# Elements
+
+## [japon] Japon
+
+# Perspectives
+
+## Léa {#lea}
+subtitle: Musées, ruines et bonne cuisine
+
+### [italie] Italie
+state: primary
+badges: culture
+
+### [japon]
+Ce que le Japon représente pour Léa (facultatif).</pre>
+      <ul class="mb-0">
+        <li>L’en-tête (entre les deux <code>---</code>) donne le titre, la langue, la version.</li>
+        <li><code># Elements</code> liste les éléments communs : <code>## [clé] Titre</code>.</li>
+        <li><code># Perspectives</code> liste les colonnes : <code>## Titre {#identifiant}</code>, puis les cartes <code>### [clé]</code> <strong>dans l’ordre des rangs</strong>, avec éventuellement <code>state:</code>, <code>badges:</code> et un détail.</li>
+        <li>Spécification complète (en anglais) : <a href="FORMAT.md" target="_blank" rel="noopener">FORMAT.md</a>. Page pour les IA : <a href="skill.md" target="_blank" rel="noopener">skill.md</a>.</li>
+      </ul>
+    </div>
+
+    <h2 id="fr-affichage"><i class="bi bi-universal-access" aria-hidden="true"></i> 11. Affichage, clavier, accessibilité</h2>
+    <div class="docs-card">
+      <p>Le menu <i class="bi bi-sliders" aria-hidden="true"></i> <strong>Réglages</strong> propose : thème jour / nuit (automatique par défaut, selon le système), <strong>motifs renforcés</strong> (hachures différentes par état, en plus des couleurs), lignes de liaison, numéros de rang, langue de l’interface (français, anglais).</p>
+      <table class="table table-sm docs-table">
+        <thead><tr><th>Touche</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd></td><td>Se déplacer entre les cartes (vers le même élément dans la colonne voisine)</td></tr>
+          <tr><td><kbd>Entrée</kbd> / <kbd>Espace</kbd></td><td>Ouvrir le détail et comparer</td></tr>
+          <tr><td><kbd>1</kbd> … <kbd>6</kbd></td><td>Changer l’état de la carte</td></tr>
+          <tr><td><kbd>M</kbd></td><td>Menu état et badges</td></tr>
+          <tr><td><kbd>Échap</kbd></td><td>Arrêter la comparaison, fermer un menu</td></tr>
+          <tr><td><kbd>Alt</kbd>+<kbd>←</kbd>/<kbd>→</kbd></td><td>Déplacer la colonne</td></tr>
+          <tr><td><kbd>E</kbd></td><td>Mode édition</td></tr>
+          <tr><td><kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd>, <kbd>F2</kbd>, <kbd>Suppr</kbd></td><td>Édition : monter / descendre, modifier, supprimer la carte</td></tr>
+          <tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd>, <kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>Annuler / rétablir, créer une version</td></tr>
+          <tr><td><kbd>Page suiv.</kbd> / <kbd>Page préc.</kbd></td><td>Présentation : dévoiler la suite / revenir</td></tr>
+          <tr><td><kbd>?</kbd></td><td>Aide des raccourcis</td></tr>
+        </tbody>
+      </table>
+      <p class="mb-0">Pour les lecteurs d’écran : chaque colonne est une liste numérotée (le rang est annoncé), les états et badges sont lus avec le titre, les changements (comparaison, état, dévoilement) sont annoncés. Les animations sont désactivées si le système le demande (réduction des animations).</p>
+    </div>
+  </main>
+
+  <!-- =================================================================== ENGLISH -->
+  <main class="docs-main" data-lang="en" lang="en" data-skill="skill-en.md" hidden>
+    <h1 class="fw-bold">Documentation</h1>
+    <p class="lead text-body-secondary">Perspective Grid (<em>Regards croisés</em>) shows <strong>how several perspectives rank the same set of elements differently</strong>: schools of thought, theories, stakeholders, periods, cultures, or simply people. Each perspective is a column, its elements are ranked from most to least important, and you compare.</p>
+
+    <div class="docs-card docs-toc">
+      <strong>Contents</strong>
+      <ol class="mb-0 mt-2">
+        <li><a href="#en-ai">Build a grid with an AI</a></li>
+        <li><a href="#en-start">Getting started</a></li>
+        <li><a href="#en-read">Reading a grid</a></li>
+        <li><a href="#en-compare">Comparing perspectives</a></li>
+        <li><a href="#en-present">Presenting without overload</a></li>
+        <li><a href="#en-annotate">Annotating live</a></li>
+        <li><a href="#en-edit">Editing a grid</a></li>
+        <li><a href="#en-files">Loading, saving, versions</a></li>
+        <li><a href="#en-share">Sharing</a></li>
+        <li><a href="#en-format">The file format</a></li>
+        <li><a href="#en-display">Display, keyboard, accessibility</a></li>
+      </ol>
+    </div>
+
+    <h2 id="en-ai"><i class="bi bi-robot" aria-hidden="true"></i> 1. Build a grid with an AI</h2>
+    <div class="ai-box">
+      <p>No need to learn the syntax: any AI (ChatGPT, Claude, Gemini, Mistral, Copilot…) can turn your course into a grid. Give it the address of the <strong>instructions page for AIs</strong>:</p>
+      <p class="mb-2"><code class="js-skill-url">docs/skill-en.md</code>
+        <button type="button" class="btn btn-sm btn-light ms-2" data-copy=".js-skill-url"><i class="bi bi-clipboard" aria-hidden="true"></i> Copy the address</button>
+        <a class="btn btn-sm btn-outline-light ms-1" href="skill-en.md" target="_blank" rel="noopener"><i class="bi bi-eye" aria-hidden="true"></i> See the page</a></p>
+      <p class="mt-3 mb-1">Then write, for example:</p>
+      <div class="ai-prompt js-prompt">Read the instructions at <span class="js-url">docs/skill-en.md</span>. Tell me whether the following course suits a perspective grid and, if so, produce the file. Audience: first-year students, 4 to 6 perspectives.<br>[paste your course, outline or notes here]</div>
+      <button type="button" class="btn btn-sm btn-light mt-2" data-copy=".js-prompt"><i class="bi bi-clipboard" aria-hidden="true"></i> Copy the prompt</button>
+      <p class="mt-3 mb-1">The AI first says whether the tool fits (it does not for a timeline, a procedure or a simple pros / cons opposition), then gives a Markdown block. Copy it and, in the <a href="../index.html">app</a>, choose <em>File › Paste Markdown</em> (or simply press <kbd>Ctrl</kbd>+<kbd>V</kbd> on the page): a preview appears, with any warnings, before the grid is replaced.</p>
+      <div class="small mt-3 opacity-75 js-local" hidden>
+        <i class="bi bi-info-circle" aria-hidden="true"></i> This documentation is opened from your computer: an online AI cannot read this address. Use the public address <code>https://edu-fpar.github.io/perspective-grid/docs/skill-en.md</code>, or the button below, and paste the text at the start of your message.
+      </div>
+      <button type="button" class="btn btn-sm btn-warning mt-2 js-copy-skill"><i class="bi bi-file-earmark-text" aria-hidden="true"></i> Copy all the instructions (for AIs without web access)</button>
+      <p class="small mt-3 mb-0 opacity-75">For a course in French: <a href="skill.md" target="_blank" rel="noopener">French version of the page</a>. Developers will also find two Claude Code skills in the repository’s <code>skills/</code> folder (finding relevant passages, then formatting with automatic validation).</p>
+    </div>
+
+    <h2 id="en-start"><i class="bi bi-rocket-takeoff" aria-hidden="true"></i> 2. Getting started</h2>
+    <div class="docs-card">
+      <ol class="mb-2">
+        <li class="mb-2"><strong>Open</strong> the <a href="../index.html">app</a>. An example is loaded the first time; the <i class="bi bi-journal-text" aria-hidden="true"></i> <em>Examples</em> menu offers three: learning theories, ethics and AI, and the end-of-year trip (the simplest one to discover the tool). The examples are in French.</li>
+        <li class="mb-2"><strong>Load your grid</strong>: <em>File › Open a .md file</em>, drop the file on the page, or paste the Markdown produced by an AI.</li>
+        <li><strong>Explore</strong>: tap an element to read its detail, tick <em>Compare</em> on two columns, then tap an element to see its rank elsewhere.</li>
+      </ol>
+      <p class="mb-0 small text-body-secondary">Everything stays in your browser: nothing is sent to a server. Your work is saved automatically on this device (<i class="bi bi-cloud-check" aria-hidden="true"></i> <em>Saved</em>, top right).</p>
+    </div>
+
+    <h2 id="en-read"><i class="bi bi-layout-three-columns" aria-hidden="true"></i> 3. Reading a grid</h2>
+    <div class="docs-card">
+      <ul>
+        <li><strong>One column = one perspective.</strong> Its header (the top card) gives its name, a subtitle (authors, period, profile…), a one-sentence summary and, with <em>Read more</em>, a detailed description.</li>
+        <li><strong>The order of the cards is the rank</strong>: the small number shows the element’s place <em>for that perspective</em>. Number 1 is what matters most to it.</li>
+        <li><strong>Tapping a card</strong> opens its detail: what the element means for this perspective. When the element also has a general description, it is offered below.</li>
+        <li><strong>The same element</strong> can appear in several columns at different ranks; it can also be missing: that is the whole point of comparing.</li>
+        <li>An <strong>empty slot</strong> is only for visual alignment; it does not count in ranks.</li>
+      </ul>
+      <h3>States (colours)</h3>
+      <p>Each state combines a colour, an icon and a border style: it stays readable without colours, and screen readers announce it.</p>
+      <table class="table table-sm docs-table">
+        <thead><tr><th>State</th><th>Visual cue</th><th>Usual meaning</th></tr></thead>
+        <tbody>
+          <tr><td><span class="state-demo sd-primary"></span>Highlighted</td><td><i class="bi bi-star-fill" aria-hidden="true"></i> thick border</td><td>Key idea of the perspective</td></tr>
+          <tr><td><span class="state-demo sd-success"></span>Valued</td><td><i class="bi bi-check-circle-fill" aria-hidden="true"></i> solid border</td><td>Favourable, valued</td></tr>
+          <tr><td><span class="state-demo sd-warning"></span>Nuanced, debated</td><td><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> dashed border</td><td>Debated, to be qualified</td></tr>
+          <tr><td><span class="state-demo sd-danger"></span>Rejected, opposed</td><td><i class="bi bi-x-circle-fill" aria-hidden="true"></i> double border</td><td>Refused, opposed</td></tr>
+          <tr><td><span class="state-demo sd-muted"></span>Secondary, set aside</td><td><i class="bi bi-dash-circle" aria-hidden="true"></i> dotted, struck-through text</td><td>Left aside</td></tr>
+        </tbody>
+      </table>
+      <h3>Badges</h3>
+      <p class="mb-2">A badge qualifies the <strong>relation</strong> of the perspective to the element. It appears at the foot of the card (on a phone, only the icon shows: tap it to read the word).</p>
+      <p class="mb-0"><i class="bi bi-bullseye" aria-hidden="true"></i> central · <i class="bi bi-check2-circle" aria-hidden="true"></i> accepted · <i class="bi bi-graph-up-arrow" aria-hidden="true"></i> overvalued · <i class="bi bi-graph-down-arrow" aria-hidden="true"></i> undervalued · <i class="bi bi-patch-question" aria-hidden="true"></i> contested · <i class="bi bi-x-octagon" aria-hidden="true"></i> rejected · <i class="bi bi-eye-slash" aria-hidden="true"></i> ignored · <i class="bi bi-slash-circle" aria-hidden="true"></i> denied · <i class="bi bi-tools" aria-hidden="true"></i> instrumentalized. A file can declare its own badges (for instance <i class="bi bi-bank" aria-hidden="true"></i> culture, <i class="bi bi-bicycle" aria-hidden="true"></i> sport in the trip example).</p>
+    </div>
+
+    <h2 id="en-compare"><i class="bi bi-intersect" aria-hidden="true"></i> 4. Comparing perspectives</h2>
+    <div class="docs-card">
+      <ol>
+        <li class="mb-2"><strong>Select at least two columns</strong>: the <em>Compare</em> box in the header, or tap the header. <em>All</em> selects every column, <em>Clear</em> empties the selection.</li>
+        <li class="mb-2"><strong>Tap an element</strong>: it becomes the <em>reference</em>. In the other selected columns, the same element is outlined with its rank gap: <span class="badge text-bg-success">↑ rank 2 → rank 1</span> (more important here), <span class="badge text-bg-danger">↓ rank 2 → rank 4</span> (less important), <span class="badge text-bg-secondary">same rank</span>.</li>
+        <li class="mb-2"><strong>Absent?</strong> A dotted box at the top of the column says so: “Japan is absent from this perspective”.</li>
+        <li>On a computer, <strong>link lines</strong> connect the cards of the same element (can be turned off in the settings).</li>
+      </ol>
+      <figure class="docs-shot"><img src="images/comparaison-absence-sombre-fr.png" alt="Four friends compared, dark theme: Japan is 2nd for Léa, 4th for Karim, 1st for Tom and absent for Sofia" loading="lazy" width="1059" height="878"><figcaption>Japan taken as the reference for Léa (rank 2): 4th for Karim, 1st for Tom, absent for Sofia (dark theme, French interface).</figcaption></figure>
+      <h3>“Compare” view (phone)</h3>
+      <p>With two columns selected, the <i class="bi bi-layout-split" aria-hidden="true"></i> <em>Compare</em> button shows only them, side by side, in a compact version (titles only): ideal on a phone.</p>
+      <h3>Bringing two columns together</h3>
+      <p class="mb-0">To compare two distant columns, move one: the <i class="bi bi-arrow-left" aria-hidden="true"></i> <i class="bi bi-arrow-right" aria-hidden="true"></i> arrows in the header, the <i class="bi bi-arrows-move" aria-hidden="true"></i> handle to drag on a computer, or <kbd>Alt</kbd>+<kbd>←</kbd>/<kbd>→</kbd>. The new order is saved in the grid.</p>
+    </div>
+
+    <h2 id="en-present"><i class="bi bi-easel" aria-hidden="true"></i> 5. Presenting without overload</h2>
+    <div class="docs-card">
+      <p>A complete grid shown all at once is rich… and can be off-putting. The <i class="bi bi-easel" aria-hidden="true"></i> <strong>Present</strong> menu offers modes that guide the eye. They never change the file and pause while editing.</p>
+      <table class="table table-sm docs-table">
+        <tbody>
+          <tr><th scope="row" class="text-nowrap">Spotlight</th><td>A single column is active (golden border), the others are greyed out; tapping a greyed column puts it in the spotlight. In the active column, the open element stands out and the others fade.</td></tr>
+          <tr><th scope="row" class="text-nowrap">Progressive</th><td>Cards stay blurred, without their state colour (it would give the answer away), until they are tapped.</td></tr>
+          <tr><th scope="row" class="text-nowrap">From scratch</th><td>Only the first header and the card shapes are visible; contents appear one by one.</td></tr>
+        </tbody>
+      </table>
+      <p>“Spotlight” combines with both reveal modes. The <strong>Next</strong> button in the bottom bar reveals what comes next, in the chosen order:</p>
+      <ul>
+        <li><strong>Column by column</strong>: the header, then the elements from #1 to the last; the active column follows.</li>
+        <li><strong>Rank by rank</strong>: all #1, then all #2…</li>
+        <li><strong>Element by element</strong>: one element appears at once in every column. With “Spotlight”, this “row” is highlighted: you see, for instance, “The teacher’s role” light up at rank 3, 5, 2, 3…</li>
+      </ul>
+      <figure class="docs-shot"><img src="images/comparaison-devoilement-fr.png" alt="Progressive reveal: three schools of thought compared, cards not yet revealed stay blurred, the presentation bar is at the bottom" loading="lazy" width="1146" height="972"><figcaption>Progressive reveal and comparison: cards not yet revealed stay blurred; the bottom bar shows “Next” and the progress (French interface).</figcaption></figure>
+      <h3>The presentation bar</h3>
+      <ul>
+        <li><i class="bi bi-chevron-left" aria-hidden="true"></i> goes back, <strong>Next</strong> reveals what follows, the counter shows the progress (“12 / 56 revealed”).</li>
+        <li><i class="bi bi-incognito" aria-hidden="true"></i> <strong>Peek</strong> discreetly shows the next step. Only turn it on if this screen is not projected.</li>
+        <li><i class="bi bi-skip-start" aria-hidden="true"></i> starts again, <i class="bi bi-eye" aria-hidden="true"></i> reveals everything, <i class="bi bi-x-lg" aria-hidden="true"></i> leaves the presentation.</li>
+        <li>A <strong>presentation clicker</strong> works straight away (Page Down / Page Up keys), as do <kbd>N</kbd> / <kbd>P</kbd>.</li>
+      </ul>
+      <h3>The presenter window</h3>
+      <p class="mb-0"><i class="bi bi-window-split" aria-hidden="true"></i> opens a second window, to keep on the laptop screen while the grid is projected (extended display). It shows what is about to be revealed with its notes (detail, state, badges), what was just revealed, the full run sheet (tap a step to jump to it) and an overview where what is still hidden is greyed out. Its buttons drive the projection. Both windows must be open in the same browser; if the window does not open, allow pop-ups for this site.</p>
+    </div>
+
+    <h2 id="en-annotate"><i class="bi bi-brush" aria-hidden="true"></i> 6. Annotating live</h2>
+    <div class="docs-card">
+      <p>Even in view mode, the trainer can annotate the grid in front of the group:</p>
+      <ul class="mb-0">
+        <li><strong>Change the state</strong>: the small round button on the right of each card (a menu of 6 states), or keys <kbd>1</kbd> to <kbd>6</kbd> on the selected card.</li>
+        <li><strong>Add a badge</strong>: through the same menu (<em>Badges</em> part), or with the <i class="bi bi-tags" aria-hidden="true"></i> <strong>badge drawer</strong>: on a computer, drag a badge onto a card; on a phone, tap a badge then the cards to annotate, and <em>Done</em>.</li>
+        <li>These annotations change the grid (they are saved and exported). To go back: <kbd>Ctrl</kbd>+<kbd>Z</kbd>, or the version history.</li>
+      </ul>
+    </div>
+
+    <h2 id="en-edit"><i class="bi bi-pencil-square" aria-hidden="true"></i> 7. Editing a grid</h2>
+    <div class="docs-card">
+      <p>The <strong>Edit</strong> button (or the <kbd>E</kbd> key) turns on edit mode, designed for computers but usable on phones. A yellow bar shows it; <em>Done</em> leaves it.</p>
+      <ul>
+        <li><strong>Edit a text</strong>: double-click a title, subtitle or short description; <kbd>Enter</kbd> confirms, <kbd>Esc</kbd> cancels.</li>
+        <li><strong>Reorder</strong>: drag a card’s <i class="bi bi-grip-vertical" aria-hidden="true"></i> handle (long press on a phone), or <kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd>.</li>
+        <li><strong>Add an element</strong>: the <i class="bi bi-plus" aria-hidden="true"></i> button between two cards (inserted at that place) or at the bottom of a column.</li>
+        <li><strong>Full form</strong>: a card’s <i class="bi bi-pencil" aria-hidden="true"></i> pencil, or <kbd>F2</kbd>. It sets the title, the <strong>key</strong>, the state, the badges and the detail.</li>
+        <li><strong>Columns</strong>: <em>Edit the perspective</em> in the header; the <i class="bi bi-three-dots-vertical" aria-hidden="true"></i> menu also adds an empty slot, duplicates or deletes the column; <em>Add a perspective</em> in the yellow bar.</li>
+        <li><strong>Title and introduction</strong>: title, subtitle, “About” text, author, source and <strong>column width</strong> (narrow for cards holding a single word or name, two columns per phone screen).</li>
+        <li><strong>Undo / redo</strong>: <kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd>, or the arrows in the yellow bar.</li>
+      </ul>
+      <div class="tip"><strong>The key is what links the columns.</strong> Two cards with the same key are “the same element” seen by two perspectives: that is what makes comparison possible. In the form, the <em>Key</em> field suggests existing keys and shows in which columns the element already appears. Leave the title empty to reuse the shared title, or write a title specific to this perspective.</div>
+      <p class="mt-3 mb-0">For bulk changes, <em>File › View / edit the Markdown</em> opens the full source, with a preview before applying.</p>
+    </div>
+
+    <h2 id="en-files"><i class="bi bi-folder2-open" aria-hidden="true"></i> 8. Loading, saving, versions</h2>
+    <div class="docs-card">
+      <h3 class="mt-0">Loading</h3>
+      <p>Four ways: <em>File › Open a .md file</em>; drop a file on the page; paste Markdown (<em>File › Paste Markdown</em>, or <kbd>Ctrl</kbd>+<kbd>V</kbd> on the page); <em>File › Open from an address</em>. In every case, a <strong>preview</strong> shows a miniature of the grid, its figures and the reading <strong>warnings</strong> (missing key, unknown state…) before the current grid is replaced. The file does not need to be perfect: the app fixes what it can and explains what it did.</p>
+      <h3>Saving and history</h3>
+      <p>The grid is saved automatically in the browser. <em>File › Save a version</em> (<kbd>Ctrl</kbd>+<kbd>S</kbd>) keeps a named copy; an automatic backup is also made before every replacement (import, example, restore). <em>File › Version history</em> lets you restore, rename, download or delete a version.</p>
+      <div class="tip">Browser storage belongs to this device and this browser, and can be erased (private browsing, clean-up). <strong>Export your grids regularly</strong> as <code>.md</code> files.</div>
+      <h3>Exporting</h3>
+      <p class="mb-0"><em>File › Export as Markdown</em> creates a <strong>new file</strong>: the version is incremented, the original version is recorded (“based on”) with the date, and the name ends with <code>-v2.md</code>, <code>-v3.md</code>… The original is never overwritten. You can also copy the Markdown to the clipboard.</p>
+    </div>
+
+    <h2 id="en-share"><i class="bi bi-share" aria-hidden="true"></i> 9. Sharing</h2>
+    <div class="docs-card">
+      <p><em>File › Share link</em> offers two kinds of links:</p>
+      <ul>
+        <li><strong>Self-contained link</strong>: the whole grid is compressed into the link; nothing is sent to a server. Handy for a message or a QR code, as long as the grid stays short.</li>
+        <li><strong>Link to an online file</strong>: put the <code>.md</code> on a public site (GitHub, LMS, school website) and paste its address; the link will always show the latest version of the file.</li>
+      </ul>
+      <p>Two boxes let the link open with the columns already selected and in the current presentation mode (for instance “from scratch”).</p>
+      <h3>Address parameters</h3>
+      <table class="table table-sm docs-table mb-0">
+        <tbody>
+          <tr><td><code>?src=https://…/grid.md</code></td><td>Loads an online file (the site must allow reading, like GitHub and its “Raw” link).</td></tr>
+          <tr><td><code>?ex=courants-pedagogiques</code>, <code>ethiques-ia</code>, <code>voyage-fin-d-annee</code></td><td>Opens an example.</td></tr>
+          <tr><td><code>&amp;cols=id1,id2</code></td><td>Preselects columns; <code>&amp;compact=1</code> opens the “Compare” view.</td></tr>
+          <tr><td><code>&amp;spot=1</code></td><td>“Spotlight” mode.</td></tr>
+          <tr><td><code>&amp;stage=veil</code> / <code>zero</code></td><td>Progressive reveal / from scratch; <code>&amp;order=column</code>, <code>rank</code> or <code>element</code> for the order.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="en-format"><i class="bi bi-markdown" aria-hidden="true"></i> 10. The file format</h2>
+    <div class="docs-card">
+      <p>A grid is a plain Markdown text file, readable by humans and easy for an AI to produce:</p>
+<pre>---
+format: perspective-grid/v1
+title: The end-of-year trip
+lang: en
+version: 1
+based_on: null
+updated: 2026-11-11
+---
+
+# Elements
+
+## [japan] Japan
+
+# Perspectives
+
+## Lea {#lea}
+subtitle: Museums, ruins and good food
+
+### [italy] Italy
+state: primary
+badges: culture
+
+### [japan]
+What Japan means to Lea (optional).</pre>
+      <ul class="mb-0">
+        <li>The front matter (between the two <code>---</code>) gives the title, language and version.</li>
+        <li><code># Elements</code> lists the shared elements: <code>## [key] Title</code>.</li>
+        <li><code># Perspectives</code> lists the columns: <code>## Title {#identifier}</code>, then the cards <code>### [key]</code> <strong>in rank order</strong>, optionally with <code>state:</code>, <code>badges:</code> and a detail.</li>
+        <li>Full specification: <a href="FORMAT.md" target="_blank" rel="noopener">FORMAT.md</a>. Page for AIs: <a href="skill-en.md" target="_blank" rel="noopener">skill-en.md</a>.</li>
+      </ul>
+    </div>
+
+    <h2 id="en-display"><i class="bi bi-universal-access" aria-hidden="true"></i> 11. Display, keyboard, accessibility</h2>
+    <div class="docs-card">
+      <p>The <i class="bi bi-sliders" aria-hidden="true"></i> <strong>Settings</strong> menu offers: light / dark theme (automatic by default, following the system), <strong>reinforced patterns</strong> (different hatching per state, on top of colours), link lines, rank numbers, interface language (French, English).</p>
+      <table class="table table-sm docs-table">
+        <thead><tr><th>Key</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd></td><td>Move between cards (to the same element in the next column)</td></tr>
+          <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>Open the detail and compare</td></tr>
+          <tr><td><kbd>1</kbd> … <kbd>6</kbd></td><td>Change the card’s state</td></tr>
+          <tr><td><kbd>M</kbd></td><td>State and badges menu</td></tr>
+          <tr><td><kbd>Esc</kbd></td><td>Stop comparing, close a menu</td></tr>
+          <tr><td><kbd>Alt</kbd>+<kbd>←</kbd>/<kbd>→</kbd></td><td>Move the column</td></tr>
+          <tr><td><kbd>E</kbd></td><td>Edit mode</td></tr>
+          <tr><td><kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd>, <kbd>F2</kbd>, <kbd>Del</kbd></td><td>Editing: move up / down, edit, delete the card</td></tr>
+          <tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd>, <kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>Undo / redo, save a version</td></tr>
+          <tr><td><kbd>Page Down</kbd> / <kbd>Page Up</kbd></td><td>Presentation: reveal next / go back</td></tr>
+          <tr><td><kbd>?</kbd></td><td>Shortcut help</td></tr>
+        </tbody>
+      </table>
+      <p class="mb-0">For screen readers: each column is a numbered list (the rank is announced), states and badges are read with the title, and changes (comparison, state, reveal) are announced. Animations are turned off when the system asks for reduced motion.</p>
+    </div>
+  </main>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toasts"></div>
+
+  <script>
+    (function () {
+      'use strict';
+      var LANGS = ['fr', 'en'];
+      function stored() { try { return JSON.parse(localStorage.getItem('pg.lang')); } catch (e) { return null; } }
+      var q = new URLSearchParams(location.search).get('lang');
+      var lang = LANGS.indexOf(q) >= 0 ? q : (LANGS.indexOf(stored()) >= 0 ? stored() : (/^fr/i.test(navigator.language || '') ? 'fr' : 'en'));
+      var appLabel = { fr: 'Ouvrir l’application', en: 'Open the app' };
+      var copied = { fr: 'Copié !', en: 'Copied!' }, failed = { fr: 'Copie impossible : sélectionnez le texte.', en: 'Copy failed: select the text.' };
+
+      function setLang(l) {
+        lang = l;
+        document.documentElement.lang = l;
+        document.querySelectorAll('.docs-main').forEach(function (m) { m.hidden = m.getAttribute('data-lang') !== l; });
+        document.querySelectorAll('[data-doc-lang]').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-doc-lang') === l ? 'true' : 'false'); });
+        document.querySelectorAll('.js-open-app').forEach(function (e) { e.textContent = appLabel[l]; });
+        document.title = l === 'fr' ? 'Documentation — Regards croisés' : 'Documentation — Perspective Grid';
+        var u = new URL(location.href); u.searchParams.set('lang', l); history.replaceState(null, '', u);
+      }
+      document.querySelectorAll('[data-doc-lang]').forEach(function (b) { b.addEventListener('click', function () { setLang(b.getAttribute('data-doc-lang')); }); });
+
+      // absolute address of the AI pages (the address an online AI can read)
+      var local = location.protocol === 'file:' || /^(localhost|127\.|\[::1\])/.test(location.hostname) || /\.(localhost|test)$/.test(location.hostname);
+      document.querySelectorAll('.docs-main').forEach(function (m) {
+        var file = m.getAttribute('data-skill');
+        var url = local ? 'https://edu-fpar.github.io/perspective-grid/docs/' + file : new URL(file, location.href).href;
+        m.querySelectorAll('.js-skill-url, .js-url').forEach(function (el) { el.textContent = url; });
+        var note = m.querySelector('.js-local'); if (note) note.hidden = !local;
+      });
+
+      function toast(msg) {
+        var box = document.getElementById('toasts'), t = document.createElement('div');
+        t.className = 'toast show align-items-center text-bg-dark border-0'; t.setAttribute('role', 'status');
+        t.innerHTML = '<div class="toast-body"></div>'; t.firstChild.textContent = msg;
+        box.appendChild(t); setTimeout(function () { t.remove(); }, 2500);
+      }
+      function copy(text) {
+        var done = function () { toast(copied[lang]); };
+        var fallback = function () {
+          var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy') ? done() : toast(failed[lang]); } catch (e) { toast(failed[lang]); }
+          ta.remove();
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback); else fallback();
+      }
+      document.querySelectorAll('[data-copy]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var el = b.closest('.docs-main').querySelector(b.getAttribute('data-copy'));
+          copy(el.innerText.trim());
+        });
+      });
+      document.querySelectorAll('.js-copy-skill').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var file = b.closest('.docs-main').getAttribute('data-skill');
+          fetch(file, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+            .then(copy, function () { toast(failed[lang]); window.open(file, '_blank'); });
+        });
+      });
+      setLang(lang);
+    })();
+  </script>
+</body>
+</html>
