@@ -1,0 +1,19 @@
+# Archives
+_archives/
+
+# Working notes (not part of the app)
+prompt-regards-croises.md
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+
+# Logs, temp, dependencies
+*.log
+.temp/
+node_modules/

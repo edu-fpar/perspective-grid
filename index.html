@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="fr" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Regards croisés</title>
+  <meta name="description" content="Regards croisés : comparez comment plusieurs points de vue hiérarchisent les mêmes éléments. Compare how several perspectives rank the same elements, from a simple Markdown file.">
+  <meta property="og:title" content="Regards croisés">
+  <meta property="og:description" content="Comparez comment plusieurs points de vue hiérarchisent les mêmes éléments.">
+  <meta name="theme-color" content="#1c1a36">
+  <script>
+    /* theme before first paint (avoids a flash); storage may be unavailable */
+    (function () {
+      var pref = 'auto';
+      try { pref = JSON.parse(localStorage.getItem('pg.theme')) || 'auto'; } catch (e) { /* ignore */ }
+      var dark = pref === 'dark' || (pref === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+    })();
+  </script>
+  <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <a class="visually-hidden-focusable pg-skip" href="#grid" data-i18n="a.skip"></a>
+
+  <nav class="pg-nav" data-i18n-aria="a.mainNav">
+    <a class="pg-brand" href="./" data-i18n-title="a.brand"><span class="logo" aria-hidden="true"><i class="bi bi-layout-three-columns"></i></span><span class="pg-hide-sm" data-i18n="a.brand"></span></a>
+
+    <div class="pg-actions">
+      <span class="pg-saved" id="saved" role="status"></span>
+
+      <div class="dropdown">
+        <button class="btn btn-sm btn-pg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-journal-text" aria-hidden="true"></i> <span class="pg-hide-sm" data-i18n="a.examples"></span><span class="visually-hidden pg-show-sm-sr" data-i18n="a.examples"></span></button>
+        <ul class="dropdown-menu dropdown-menu-end" id="examples-menu"></ul>
+      </div>
+
+      <div class="dropdown">
+        <button class="btn btn-sm btn-pg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-file-earmark" aria-hidden="true"></i> <span class="pg-hide-sm" data-i18n="a.file"></span><span class="visually-hidden pg-show-sm-sr" data-i18n="a.file"></span></button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><h6 class="dropdown-header" data-i18n="a.load"></h6></li>
+          <li><button class="dropdown-item" type="button" id="act-import"><i class="bi bi-folder2-open me-2" aria-hidden="true"></i><span data-i18n="a.openFile"></span></button></li>
+          <li><button class="dropdown-item" type="button" id="act-paste"><i class="bi bi-clipboard me-2" aria-hidden="true"></i><span data-i18n="a.pasteText"></span></button></li>
+          <li><button class="dropdown-item" type="button" id="act-url"><i class="bi bi-link-45deg me-2" aria-hidden="true"></i><span data-i18n="a.openUrl"></span></button></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><button class="dropdown-item" type="button" id="act-export"><i class="bi bi-filetype-md me-2" aria-hidden="true"></i><span data-i18n="a.export"></span></button></li>
+          <li><button class="dropdown-item" type="button" id="act-share"><i class="bi bi-share me-2" aria-hidden="true"></i><span data-i18n="a.share"></span></button></li>
+          <li><button class="dropdown-item" type="button" id="act-source"><i class="bi bi-markdown me-2" aria-hidden="true"></i><span data-i18n="a.source"></span></button></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><button class="dropdown-item" type="button" id="act-snapshot"><i class="bi bi-camera me-2" aria-hidden="true"></i><span data-i18n="a.snapshot"></span> <kbd class="small ms-2">Ctrl+S</kbd></button></li>
+          <li><button class="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#history"><i class="bi bi-clock-history me-2" aria-hidden="true"></i><span data-i18n="a.history"></span> <span class="badge rounded-pill text-bg-secondary ms-1" id="history-count">0</span></button></li>
+        </ul>
+      </div>
+
+      <button class="btn btn-sm btn-pg" id="act-edit" type="button" aria-pressed="false" data-i18n-title="a.editTitle"><i class="bi bi-pencil-square" aria-hidden="true"></i> <span class="pg-hide-sm" data-i18n="a.edit"></span><span class="visually-hidden pg-show-sm-sr" data-i18n="a.edit"></span></button>
+
+      <div class="dropdown">
+        <button class="btn btn-sm btn-pg" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" data-i18n-aria="a.settings" data-i18n-title="a.settings"><i class="bi bi-sliders" aria-hidden="true"></i></button>
+        <div class="dropdown-menu dropdown-menu-end pg-settings p-3">
+          <fieldset class="mb-3">
+            <legend class="fs-6 fw-semibold mb-1"><i class="bi bi-circle-half" id="theme-icon" aria-hidden="true"></i> <span data-i18n="a.theme"></span></legend>
+            <div class="btn-group btn-group-sm w-100" role="group">
+              <input type="radio" class="btn-check" name="theme" id="th-auto" value="auto"><label class="btn btn-outline-secondary" for="th-auto" data-i18n="a.themeAuto"></label>
+              <input type="radio" class="btn-check" name="theme" id="th-light" value="light"><label class="btn btn-outline-secondary" for="th-light"><i class="bi bi-sun" aria-hidden="true"></i> <span data-i18n="a.themeLight"></span></label>
+              <input type="radio" class="btn-check" name="theme" id="th-dark" value="dark"><label class="btn btn-outline-secondary" for="th-dark"><i class="bi bi-moon-stars" aria-hidden="true"></i> <span data-i18n="a.themeDark"></span></label>
+            </div>
+          </fieldset>
+          <fieldset class="mb-3">
+            <legend class="fs-6 fw-semibold mb-1" data-i18n="a.display"></legend>
+            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="pref-patterns"><label class="form-check-label" for="pref-patterns" data-i18n="a.prefPatterns"></label></div>
+            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="pref-links"><label class="form-check-label" for="pref-links" data-i18n="a.prefLinks"></label></div>
+            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="pref-ranks"><label class="form-check-label" for="pref-ranks" data-i18n="a.prefRanks"></label></div>
+          </fieldset>
+          <fieldset class="mb-3">
+            <legend class="fs-6 fw-semibold mb-1" data-i18n="a.language"></legend>
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" class="btn btn-outline-secondary" data-lang="fr" lang="fr">Français</button>
+              <button type="button" class="btn btn-outline-secondary" data-lang="en" lang="en">English</button>
+            </div>
+          </fieldset>
+          <button type="button" class="btn btn-sm btn-light border w-100" id="act-keys"><i class="bi bi-keyboard" aria-hidden="true"></i> <span data-i18n="k.title"></span> <kbd>?</kbd></button>
+          <a class="btn btn-sm btn-link w-100 mt-1" href="docs/FORMAT.md" target="_blank" rel="noopener"><i class="bi bi-book" aria-hidden="true"></i> <span data-i18n="a.formatDoc"></span></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="pg-dochead">
+    <div class="pg-dochead-text">
+      <h1 id="doc-title" class="pg-doc-title" data-edit="d-title"></h1>
+      <p id="doc-subtitle" class="pg-doc-subtitle" data-edit="d-subtitle"></p>
+    </div>
+    <button type="button" class="btn btn-sm btn-link pg-intro-btn" id="doc-intro-btn" aria-expanded="false" aria-controls="doc-intro" hidden><i class="bi bi-info-circle" aria-hidden="true"></i> <span data-i18n="a.about"></span></button>
+    <button type="button" class="btn btn-sm btn-outline-warning pg-warn-btn" id="warn-btn" hidden><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> <span id="warn-count">0</span><span class="visually-hidden" data-i18n="a.warnTitle"></span></button>
+  </header>
+  <div class="pg-intro pg-prose" id="doc-intro" hidden></div>
+
+  <div class="pg-toolbar" role="toolbar" data-i18n-aria="t.aria">
+    <span class="pg-sel-info" id="sel-info" aria-live="polite"></span>
+    <button type="button" class="btn btn-sm btn-outline-secondary" id="act-all"><i class="bi bi-check2-all" aria-hidden="true"></i> <span class="pg-hide-sm" data-i18n="t.all"></span><span class="visually-hidden pg-show-sm-sr" data-i18n="t.all"></span></button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" id="act-clear" hidden><i class="bi bi-x-lg" aria-hidden="true"></i> <span class="pg-hide-xs" data-i18n="t.clear"></span><span class="visually-hidden pg-show-xs-sr" data-i18n="t.clear"></span></button>
+    <button type="button" class="btn btn-sm btn-outline-primary" id="act-compact" aria-pressed="false" disabled data-i18n-title="t.compactTitle"><i class="bi bi-layout-split" aria-hidden="true"></i> <span data-i18n="t.compact"></span></button>
+    <div class="dropdown ms-auto">
+      <button type="button" class="btn btn-sm btn-outline-primary" id="act-stage" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-pressed="false" data-i18n-title="st.menuTitle"><i class="bi bi-easel" aria-hidden="true"></i> <span class="pg-hide-xs" data-i18n="st.menu"></span><span class="visually-hidden pg-show-xs-sr" data-i18n="st.menu"></span></button>
+      <div class="dropdown-menu dropdown-menu-end pg-settings p-3">
+        <div class="form-check form-switch mb-1"><input class="form-check-input" type="checkbox" role="switch" id="stg-spot"><label class="form-check-label fw-semibold" for="stg-spot" data-i18n="st.spot"></label></div>
+        <p class="small text-body-secondary mb-3" data-i18n="st.spotHelp"></p>
+        <fieldset class="mb-3"><legend class="fs-6 fw-semibold mb-1" data-i18n="st.reveal"></legend>
+          <div class="form-check"><input class="form-check-input" type="radio" name="stg-reveal" id="stg-r-off" value="off" checked><label class="form-check-label" for="stg-r-off" data-i18n="st.revealOff"></label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="stg-reveal" id="stg-r-veil" value="veil"><label class="form-check-label" for="stg-r-veil"><span data-i18n="st.revealVeil"></span><small class="d-block text-body-secondary" data-i18n="st.revealVeilHelp"></small></label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="stg-reveal" id="stg-r-zero" value="zero"><label class="form-check-label" for="stg-r-zero"><span data-i18n="st.revealZero"></span><small class="d-block text-body-secondary" data-i18n="st.revealZeroHelp"></small></label></div>
+        </fieldset>
+        <fieldset class="mb-3"><legend class="fs-6 fw-semibold mb-1" data-i18n="st.order"></legend>
+          <div class="form-check"><input class="form-check-input" type="radio" name="stg-order" id="stg-o-col" value="column" checked><label class="form-check-label" for="stg-o-col" data-i18n="st.orderColumn"></label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="stg-order" id="stg-o-rank" value="rank"><label class="form-check-label" for="stg-o-rank" data-i18n="st.orderRank"></label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="stg-order" id="stg-o-el" value="element"><label class="form-check-label" for="stg-o-el" data-i18n="st.orderElement"></label></div>
+        </fieldset>
+        <button type="button" class="btn btn-sm btn-light border w-100" id="stg-presenter"><i class="bi bi-window-split" aria-hidden="true"></i> <span data-i18n="st.presenter"></span></button>
+        <p class="small text-body-secondary mt-2 mb-0" data-i18n="st.keysHelp"></p>
+      </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="offcanvas" data-bs-target="#badges" data-i18n-title="b.drawerTitle"><i class="bi bi-tags" aria-hidden="true"></i> <span class="pg-hide-xs" data-i18n="b.drawer"></span><span class="visually-hidden pg-show-xs-sr" data-i18n="b.drawer"></span></button>
+  </div>
+
+  <div class="pg-editbar" id="edit-bar" role="toolbar" data-i18n-aria="e.barAria" hidden>
+    <span class="pg-editbar-label"><i class="bi bi-pencil-square" aria-hidden="true"></i> <span class="pg-hide-sm" data-i18n="e.mode"></span></span>
+    <button type="button" class="btn btn-sm btn-light" id="act-undo" data-i18n-title="e.undoTitle"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i><span class="visually-hidden" data-i18n="e.undo"></span></button>
+    <button type="button" class="btn btn-sm btn-light" id="act-redo" data-i18n-title="e.redoTitle"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i><span class="visually-hidden" data-i18n="e.redo"></span></button>
+    <button type="button" class="btn btn-sm btn-light" id="act-doc"><i class="bi bi-card-heading" aria-hidden="true"></i> <span class="pg-hide-xs" data-i18n="e.docProps"></span></button>
+    <button type="button" class="btn btn-sm btn-light" id="act-add-col"><i class="bi bi-plus-square" aria-hidden="true"></i> <span class="pg-hide-xs" data-i18n="e.addColumn"></span></button>
+    <span class="pg-editbar-hint pg-hide-sm" data-i18n="e.hint"></span>
+    <button type="button" class="btn btn-sm btn-warning ms-auto" id="act-done"><i class="bi bi-check-lg" aria-hidden="true"></i> <span data-i18n="e.done"></span></button>
+  </div>
+
+  <div class="pg-armed" id="armed-bar" role="status" hidden>
+    <span id="armed-label"></span>
+    <button type="button" class="btn btn-sm btn-light ms-auto" id="act-disarm" data-i18n="b.disarm"></button>
+  </div>
+
+  <main class="pg-scroller" id="scroller">
+    <div class="pg-grid" id="grid" tabindex="-1" data-i18n-aria="g.aria" role="region"></div>
+  </main>
+
+  <div class="pg-stagebar" id="stage-bar" role="toolbar" data-i18n-aria="st.barAria" hidden>
+    <button type="button" class="btn btn-light border" id="st-prev" data-i18n-title="st.prevTitle"><i class="bi bi-chevron-left" aria-hidden="true"></i><span class="visually-hidden" data-i18n="st.prev"></span></button>
+    <button type="button" class="btn btn-accent" id="st-next" data-i18n-title="st.nextTitle"><span id="st-next-label"></span> <i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+    <span class="pg-stage-progress" id="st-progress" aria-live="polite"></span>
+    <button type="button" class="btn btn-sm btn-light border" id="st-peek" aria-pressed="false" data-i18n-title="st.peekTitle"><i class="bi bi-incognito" aria-hidden="true"></i> <span class="pg-hide-sm" data-i18n="st.peek"></span><span class="visually-hidden pg-show-sm-sr" data-i18n="st.peek"></span></button>
+    <span class="pg-stage-peek" id="st-peek-text" hidden></span>
+    <span class="pg-stage-tools">
+      <button type="button" class="btn btn-sm btn-light border" id="st-reset" data-i18n-title="st.reset"><i class="bi bi-skip-start" aria-hidden="true"></i><span class="visually-hidden" data-i18n="st.reset"></span></button>
+      <button type="button" class="btn btn-sm btn-light border" id="st-all" data-i18n-title="st.all"><i class="bi bi-eye" aria-hidden="true"></i><span class="visually-hidden" data-i18n="st.all"></span></button>
+      <button type="button" class="btn btn-sm btn-light border pg-hide-sm" id="st-presenter" data-i18n-title="st.presenter"><i class="bi bi-window-split" aria-hidden="true"></i><span class="visually-hidden" data-i18n="st.presenter"></span></button>
+      <button type="button" class="btn btn-sm btn-light border" id="st-exit" data-i18n-title="st.exit"><i class="bi bi-x-lg" aria-hidden="true"></i><span class="visually-hidden" data-i18n="st.exit"></span></button>
+    </span>
+  </div>
+  <div class="pg-presenter" id="presenter" hidden></div>
+
+  <!-- version history -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="history" aria-labelledby="history-title">
+    <div class="offcanvas-header border-bottom">
+      <h2 class="offcanvas-title h5" id="history-title"><i class="bi bi-clock-history" aria-hidden="true"></i> <span data-i18n="h.title"></span></h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-i18n-aria="c.close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <p class="small text-body-secondary" data-i18n="h.intro"></p>
+      <div id="history-list"></div>
+    </div>
+  </div>
+
+  <!-- badge drawer -->
+  <div class="offcanvas offcanvas-end pg-drawer" tabindex="-1" id="badges" aria-labelledby="badges-title" data-bs-scroll="true" data-bs-backdrop="false">
+    <div class="offcanvas-header border-bottom">
+      <h2 class="offcanvas-title h5" id="badges-title"><i class="bi bi-tags" aria-hidden="true"></i> <span data-i18n="b.drawerTitle"></span></h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-i18n-aria="c.close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <p class="small text-body-secondary" id="drawer-help"></p>
+      <div class="pg-chips" id="badge-list"></div>
+      <p class="small text-body-secondary mt-3 mb-0" data-i18n="b.customHelp"></p>
+    </div>
+  </div>
+
+  <div class="pg-drop-overlay" id="drop-overlay" hidden><i class="bi bi-filetype-md" aria-hidden="true"></i><span data-i18n="i.dropRelease"></span></div>
+  <div class="visually-hidden" id="live" aria-live="polite" aria-atomic="true"></div>
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toasts"></div>
+  <noscript><p style="padding:2rem;font-family:sans-serif">Regards croisés nécessite JavaScript. · Requires JavaScript.</p></noscript>
+
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/marked/marked.min.js"></script>
+  <script src="js/core/pg.js"></script>
+  <script src="js/core/format.js"></script>
+  <script src="js/core/i18n.js"></script>
+  <script src="js/core/samples.js"></script>
+  <script src="js/app/ui.js"></script>
+  <script src="js/app/grid.js"></script>
+  <script src="js/app/edit.js"></script>
+  <script src="js/app/io.js"></script>
+  <script src="js/app/stage.js"></script>
+  <script src="js/app/app.js"></script>
+</body>
+</html>

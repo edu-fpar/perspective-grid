@@ -1,0 +1,12 @@
+{
+  "name": "perspective-grid",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Regards croisés — compare how several perspectives rank the same elements. Static web app, no build step.",
+  "scripts": {
+    "test": "node --test tests/format.test.js",
+    "samples": "node tools/build-samples.js",
+    "validate": "node tools/validate.js examples/*.md"
+  },
+  "license": "MIT"
+}
