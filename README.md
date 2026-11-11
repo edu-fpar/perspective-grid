@@ -17,6 +17,7 @@ Application web statique, 100 % côté navigateur, sans étape de build : même 
 **En ligne** : ouvrez le lien ci-dessus. Exemples directs :
 [courants pédagogiques](https://edu-fpar.github.io/perspective-grid/?ex=courants-pedagogiques) ·
 [éthiques et IA](https://edu-fpar.github.io/perspective-grid/?ex=ethiques-ia) ·
+[voyage de fin d’année](https://edu-fpar.github.io/perspective-grid/?ex=voyage-fin-d-annee) (le plus simple pour découvrir l’outil) ·
 [éthiques et IA, à partir de zéro, élément par élément](https://edu-fpar.github.io/perspective-grid/?ex=ethiques-ia&stage=zero&spot=1&order=element).
 
 **En local, avec Firefox** : ouvrez les outils de développement et ajoutez le dossier du projet : Firefox
@@ -65,7 +66,7 @@ Télécommande de présentation : **Page suivante / Page précédente** (ou N / 
 |---|---|
 | `?src=https://…/grille.md` | Charge un fichier en ligne (même site, ou site autorisant CORS : GitHub « Raw »…). |
 | `#z=…` | Grille complète compressée dans le lien (généré par l’application). |
-| `?ex=courants-pedagogiques` / `?ex=ethiques-ia` | Ouvre un exemple. |
+| `?ex=courants-pedagogiques` / `?ex=ethiques-ia` / `?ex=voyage-fin-d-annee` | Ouvre un exemple. |
 | `&cols=id1,id2` | Présélectionne des colonnes pour la comparaison. |
 | `&compact=1` | Ouvre directement la vue comparaison compacte. |
 | `&spot=1` | Ouvre en mode « À la une ». |
@@ -107,6 +108,13 @@ Détail propre à ce point de vue.
 state: danger
 badges: rejected
 ```
+
+### Largeur des colonnes
+
+Par défaut, les colonnes ont une largeur adaptée à des cartes avec du texte. Pour des cartes très courtes
+(un nom de pays, un mot), ajoutez `columns: narrow` dans l’en-tête du fichier, ou choisissez « Étroites »
+dans Éditer › Titre et présentation : les colonnes sont plus serrées, et deux tiennent sur un écran de
+téléphone. `columns: wide` donne des colonnes plus larges.
 
 ## Skills (IA)
 

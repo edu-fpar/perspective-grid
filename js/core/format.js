@@ -24,7 +24,9 @@
     instrumentalized: 'tools'
   };
   /** Front-matter keys written in this order; any other scalar key is kept verbatim after them. */
-  var META_KEYS = ['format', 'title', 'subtitle', 'lang', 'version', 'based_on', 'updated', 'author', 'source', 'license'];
+  var META_KEYS = ['format', 'title', 'subtitle', 'lang', 'version', 'based_on', 'updated', 'columns', 'author', 'source', 'license'];
+  /** Optional display hint: width of the columns ("normal" when absent). */
+  var COLUMN_WIDTHS = ['narrow', 'normal', 'wide'];
   var SECTION_ALIASES = {
     elements: /^(elements?|éléments?|catalog(ue)?)$/i,
     perspectives: /^(perspectives?|points? de vue|columns?|colonnes?)$/i
@@ -142,6 +144,10 @@
     if (doc.meta.version == null || typeof doc.meta.version !== 'number') {
       if (doc.meta.version != null) warn('bad-version', start, { value: String(doc.meta.version) });
       doc.meta.version = 1;
+    }
+    if (doc.meta.columns != null && COLUMN_WIDTHS.indexOf(String(doc.meta.columns)) < 0) {
+      warn('unknown-columns', start, { value: String(doc.meta.columns), allowed: COLUMN_WIDTHS.join(', ') });
+      doc.meta.columns = null;
     }
     return end + 1;
   }
@@ -401,6 +407,7 @@
     'bad-badge-definition': 'Unreadable badge definition: "{text}" (expected "key: icon | Label").',
     'unknown-format': 'Unknown format "{value}" (expected ' + FORMAT_ID + ').',
     'bad-version': 'The version "{value}" is not a whole number; 1 is used.',
+    'unknown-columns': 'Unknown column width "{value}" (allowed: {allowed}); the normal width is used.',
     'no-title': 'The document has no title.',
     'no-perspectives': 'No perspective found (expected "# Perspectives" then "## Title {#id}").',
     'unknown-section': 'Unknown section "# {title}": its content is ignored.',
@@ -428,6 +435,7 @@
   return {
     FORMAT_ID: FORMAT_ID,
     STATES: STATES,
+    COLUMN_WIDTHS: COLUMN_WIDTHS,
     BUILTIN_BADGES: BUILTIN_BADGES,
     SPACER_KEY: SPACER_KEY,
     MESSAGES: MESSAGES,

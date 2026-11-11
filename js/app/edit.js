@@ -281,6 +281,9 @@
       '<div class="col-12"><label class="form-label fw-semibold" for="d-intro">' + esc(T('e.docIntro')) + '</label><textarea class="form-control" id="d-intro" rows="4">' + esc(d.intro || '') + '</textarea><div class="form-text">' + esc(T('e.mdHelp')) + '</div></div>' +
       '<div class="col-sm-6"><label class="form-label fw-semibold" for="d-author">' + esc(T('e.docAuthor')) + '</label><input class="form-control" id="d-author" maxlength="160" value="' + esc(d.meta.author || '') + '"></div>' +
       '<div class="col-sm-6"><label class="form-label fw-semibold" for="d-source">' + esc(T('e.docSource')) + '</label><input class="form-control" id="d-source" maxlength="300" value="' + esc(d.meta.source || '') + '"></div>' +
+      '<div class="col-sm-6"><label class="form-label fw-semibold" for="d-columns">' + esc(T('e.docColumns')) + '</label><select class="form-select" id="d-columns">' +
+      F.COLUMN_WIDTHS.map(function (w) { return '<option value="' + w + '"' + ((d.meta.columns || 'normal') === w ? ' selected' : '') + '>' + esc(T('e.cols.' + w)) + '</option>'; }).join('') +
+      '</select><div class="form-text">' + esc(T('e.docColumnsHelp')) + '</div></div>' +
       '<div class="col-12 small text-body-secondary">' + esc(T('e.docVersion', { v: d.meta.version, based: d.meta.based_on || '—', updated: d.meta.updated || '—' })) + '</div>' +
       '</div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">' + esc(T('c.cancel')) + '</button>' +
       '<button type="submit" class="btn btn-accent"><i class="bi bi-check-lg" aria-hidden="true"></i> ' + esc(T('c.save')) + '</button></div></form>';
@@ -294,6 +297,7 @@
       d.meta.lang = $('#d-lang').value.trim() || 'fr';
       d.meta.author = $('#d-author').value.trim() || null;
       d.meta.source = $('#d-source').value.trim() || null;
+      d.meta.columns = $('#d-columns').value === 'normal' ? null : $('#d-columns').value;
       d.intro = $('#d-intro').value.replace(/\s+$/, '');
       m.hide();
       commit();

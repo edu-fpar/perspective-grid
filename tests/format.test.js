@@ -161,3 +161,15 @@ test('an element absent from the catalog keeps its title when columns are reorde
   assert.equal(F.cellTitle(back.doc, back.doc.perspectives[0].cells[0]), 'Shared title');
   assert.equal(F.cellTitle(back.doc, back.doc.perspectives[1].cells[0]), 'Shared title');
 });
+
+test('the optional columns width is read, validated and written back', () => {
+  const base = '---\nformat: perspective-grid/v1\ntitle: T\ncolumns: narrow\n---\n\n# Perspectives\n\n## A {#a}\n';
+  const { doc, warnings } = F.parse(base);
+  assert.deepEqual(warnings, []);
+  assert.equal(doc.meta.columns, 'narrow');
+  assert.match(F.serialize(doc), /\ncolumns: narrow\n/);
+  const bad = F.parse(base.replace('narrow', 'tiny'));
+  assert.equal(bad.warnings[0].code, 'unknown-columns');
+  assert.equal(bad.doc.meta.columns, null);
+  assert.doesNotMatch(F.serialize(F.parse('---\nformat: perspective-grid/v1\ntitle: T\n---\n').doc), /columns:/);
+});

@@ -183,7 +183,10 @@
     'w.unknown-state': 'État « {value} » inconnu (possibles : {allowed}) : « default » est utilisé.',
     'w.unknown-badge': 'Badge « {value} » inconnu : déclarez-le dans l’en-tête (badges:) pour lui donner une icône et un libellé.',
     'w.duplicate-in-column': 'La clé [{key}] apparaît deux fois dans « {perspective} » : la comparaison utilise la première.',
-    'w.unknown-key': 'La clé [{key}] n’est pas dans le catalogue et la cellule n’a pas de titre : un élément a été créé.'
+    'w.unknown-key': 'La clé [{key}] n’est pas dans le catalogue et la cellule n’a pas de titre : un élément a été créé.',
+    'w.unknown-columns': 'Largeur de colonnes « {value} » inconnue (possibles : {allowed}) : la largeur normale est utilisée.',
+    'e.docColumns': 'Largeur des colonnes', 'e.docColumnsHelp': 'Étroites : pour des cartes très courtes (un mot, un nom).',
+    'e.cols.narrow': 'Étroites', 'e.cols.normal': 'Normales', 'e.cols.wide': 'Larges'
   }, 'Français');
 
   /* =================================================================== EN */
@@ -312,7 +315,9 @@
     's.srcTitle': 'Link to an online file', 's.srcIntro': 'Put the .md file on a public site (GitHub, LMS, school server) and paste its address: the link will always show the latest version of the file.',
     's.srcLabel': 'Address of the .md file', 's.copy': 'Copy the link', 's.open': 'Open', 's.copied': 'Link copied.',
     's.length': 'Length: {n} characters.', 's.long': 'Very long link: some messaging apps will cut it. Prefer a link to an online file.',
-    's.unsupported': 'This browser cannot compress links.'
+    's.unsupported': 'This browser cannot compress links.',
+    'e.docColumns': 'Column width', 'e.docColumnsHelp': 'Narrow: for very short cards (a word, a name).',
+    'e.cols.narrow': 'Narrow', 'e.cols.normal': 'Normal', 'e.cols.wide': 'Wide'
   }, 'English');
 })(window.PG);
 

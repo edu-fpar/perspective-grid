@@ -51,6 +51,7 @@ inside details.
   `contested`, `instrumentalized`… Use custom badges (front matter `badges:`) only if none fits.
 
 **Front matter**: `version: 1`, `based_on: null`, `updated:` today's date (YYYY-MM-DD) for a new file.
+Add `columns: narrow` only when cells are a word or a name with no detail.
 
 **Intro** (text before `# Elements`): 1–3 sentences saying what the ranks mean in this grid and any
 simplification made.

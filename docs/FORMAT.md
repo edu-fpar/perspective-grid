@@ -90,6 +90,7 @@ quote them when they contain `: ` or ` #`, or start with a special character.
 | `version` | yes | Whole number, incremented by the app on each export. |
 | `based_on` | yes | `null`, or the version this file derives from (e.g. `"Les courants pédagogiques v1"`). |
 | `updated` | yes | Date of the last export, `YYYY-MM-DD` (or `null`). |
+| `columns` | no | Display hint: `narrow` (cards of a word or a name, two columns per phone screen), `normal` (default, omit the line) or `wide`. |
 | `author`, `source`, `license` | no | Free text. |
 | `badges` | no | Custom badges (see § 4.2). |
 
@@ -188,6 +189,7 @@ The parser never fails: it builds the best possible model and returns **warnings
 | Situation | Result | Warning code |
 |---|---|---|
 | No front matter / unknown `format` | defaults are used | `no-front-matter`, `unknown-format` |
+| Unknown `columns` value | normal width | `unknown-columns` |
 | `## Title` without `{#id}` | id = slug of the title | — |
 | Same perspective id twice | renamed `id-2` | `duplicate-perspective` |
 | `### Title` without `[key]` | key = slug of the title | `cell-no-key` |

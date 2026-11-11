@@ -108,6 +108,8 @@
 
   function renderDocHead() {
     var d = state.doc;
+    // display hint from the file: narrow / normal / wide columns
+    document.body.setAttribute('data-columns', d.meta.columns || 'normal');
     var t = $('doc-title'), s = $('doc-subtitle');
     t.textContent = d.meta.title || '';
     s.textContent = d.meta.subtitle || '';

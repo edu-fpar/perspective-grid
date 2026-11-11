@@ -7,7 +7,7 @@ const path = require('path');
 const F = require('../js/core/format.js');
 
 const dir = path.join(__dirname, '..', 'examples');
-const ORDER = ['courants-pedagogiques', 'ethiques-ia'];
+const ORDER = ['courants-pedagogiques', 'ethiques-ia', 'voyage-fin-d-annee'];
 const files = fs.readdirSync(dir).filter((f) => f.endsWith('.md'))
   .sort((a, b) => (ORDER.indexOf(a.slice(0, -3)) + 1 || 99) - (ORDER.indexOf(b.slice(0, -3)) + 1 || 99));
 const list = files.map((f) => {
