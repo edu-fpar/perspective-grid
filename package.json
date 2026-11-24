@@ -8,5 +8,5 @@
     "samples": "node tools/build-samples.js",
     "validate": "node tools/validate.js examples/*.md"
   },
-  "license": "MIT"
+  "license": "CC-BY-NC-SA-4.0"
 }

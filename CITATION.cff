@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this tool in teaching or research, please cite it as below."
+type: software
+title: "Perspective Grid (Regards croisés)"
+abstract: "Interactive teaching tool showing how different viewpoints rank the same items differently. Grids can be generated with any AI."
+authors:
+  - family-names: Parlant
+    given-names: François
+    orcid: "https://orcid.org/0009-0002-8059-6408"
+version: "1.0.0"
+date-released: "2026-11-24"
+license: CC-BY-NC-SA-4.0
+repository-code: "https://github.com/edu-fpar/perspective-grid"
+url: "https://edu-fpar.github.io/perspective-grid/"
+keywords:
+  - education
+  - critical thinking
+  - comparison
+  - any subject
