@@ -9,6 +9,7 @@ authors:
     orcid: "https://orcid.org/0009-0002-8059-6408"
 version: "1.0.0"
 date-released: "2026-11-24"
+doi: 10.5281/zenodo.24508193
 license: CC-BY-NC-SA-4.0
 repository-code: "https://github.com/edu-fpar/perspective-grid"
 url: "https://edu-fpar.github.io/perspective-grid/"

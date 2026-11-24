@@ -1,5 +1,7 @@
 # Regards croisés (`perspective-grid`)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24508193.svg)](https://doi.org/10.5281/zenodo.24508193)
+
 Outil pédagogique qui montre **comment plusieurs points de vue hiérarchisent différemment un même ensemble
 d’éléments** : courants, théories, acteurs, époques, cultures… Chaque point de vue est une colonne ; ses
 éléments sont classés du plus au moins important ; on compare les rangs, les absences et les positions
@@ -182,7 +184,7 @@ tools/                validate.js, build-samples.js
 
 **Citer cet outil** (bouton *Cite this repository* de GitHub, d'après [CITATION.cff](CITATION.cff)) :
 
-> Parlant, F. (2026). *Perspective Grid (Regards croisés)* [Logiciel pédagogique]. https://github.com/edu-fpar/perspective-grid
+> Parlant, F. (2026). *Perspective Grid (Regards croisés)* [Logiciel pédagogique]. Zenodo. https://doi.org/10.5281/zenodo.24508193
 
 Vous l'utilisez en cours ? [Dites-le-moi](https://www.linkedin.com/in/francois-parlant/) : ces retours m'aident à faire connaître et améliorer l'outil.
 
@@ -194,6 +196,6 @@ Vous l'utilisez en cours ? [Dites-le-moi](https://www.linkedin.com/in/francois-p
 
 **How to cite** (GitHub's *Cite this repository* button, from [CITATION.cff](CITATION.cff)):
 
-> Parlant, F. (2026). *Perspective Grid (Regards croisés)* [Educational software]. https://github.com/edu-fpar/perspective-grid
+> Parlant, F. (2026). *Perspective Grid (Regards croisés)* [Educational software]. Zenodo. https://doi.org/10.5281/zenodo.24508193
 
 Using it in class? [Let me know](https://www.linkedin.com/in/francois-parlant/): this feedback helps me improve the tool and spread the word.
