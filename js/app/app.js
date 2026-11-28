@@ -326,7 +326,11 @@
     });
     document.querySelectorAll('[data-lang]').forEach(function (b) {
       b.classList.toggle('active', b.getAttribute('data-lang') === PG.i18n.lang());
-      b.addEventListener('click', function () { PG.i18n.setLang(b.getAttribute('data-lang')); location.reload(); });
+      b.addEventListener('click', function () {
+        PG.i18n.setLang(b.getAttribute('data-lang'));
+        var u = new URL(location.href);   // ?lang= in the address would override the new choice
+        if (u.searchParams.has('lang')) { u.searchParams.delete('lang'); location.href = u.toString(); } else location.reload();
+      });
     });
 
     // undo button inside toasts

@@ -17,9 +17,11 @@ posiciones (central, rechazado, ignorado…).
 Aplicación web estática, 100 % en el navegador, sin compilación: Bootstrap 5.3, Bootstrap Icons, marked,
 JavaScript sin framework, `localStorage`.
 
-> **Idioma de la interfaz**: por ahora la interfaz está en **francés e inglés** (Ajustes › *Interface
-> language*); las capturas de esta página la muestran en inglés. Las cuadrículas, en cambio, se pueden
-> escribir en cualquier idioma, como el [ejemplo en español](visuels/es/viaje-fin-de-curso.md).
+La interfaz está en **español, francés e inglés**: Ajustes › Idioma de la interfaz, o `?lang=es` en la
+dirección (por ejemplo [edu-fpar.github.io/perspective-grid/?lang=es](https://edu-fpar.github.io/perspective-grid/?lang=es)).
+Las cuadrículas se pueden escribir en cualquier idioma, como el [ejemplo en español](visuels/es/viaje-fin-de-curso.md).
+
+![Ajustes: tema, visualización e idioma de la interfaz](visuels/es/captures/settings-es.png)
 
 [Documentación (en inglés)](https://edu-fpar.github.io/perspective-grid/docs/?lang=en) &nbsp;·&nbsp; [Página para las IA](docs/skill-en.md) &nbsp;·&nbsp; [Formato de archivo](docs/FORMAT.md)
 
@@ -33,7 +35,7 @@ dirección de la página de instrucciones y tu contenido:
 > Público: estudiantes de primer año, de 4 a 6 puntos de vista. [pega aquí tu curso, tu esquema o tus notas]
 
 La IA dice primero si la herramienta es adecuada y luego da un bloque de Markdown para pegar en la
-aplicación (*File › Paste Markdown*, o Ctrl+V en la página). Las instrucciones existen en inglés
+aplicación (*Archivo › Pegar Markdown…*, o Ctrl+V en la página). Las instrucciones existen en inglés
 ([docs/skill-en.md](docs/skill-en.md)) y en francés ([docs/skill.md](docs/skill.md)). El archivo
 [`llms.txt`](llms.txt) de la raíz indica estas páginas a las IA.
 
@@ -65,33 +67,31 @@ archivo en línea (`?src=`).
 
 ## Uso
 
-Los nombres de los botones se dan tal como aparecen en la interfaz en inglés.
-
 | Quiero… | Cómo |
 |---|---|
-| Comparar dos puntos de vista | Marcar «Compare» en 2 encabezados (o tocar el encabezado) y luego tocar un elemento: puestos, diferencias ↑↓, ausencias, líneas de unión. |
-| Comparar en el móvil | Seleccionar 2 columnas y luego **Compare**: vista compacta lado a lado. |
-| Anotar en directo | Botón de estado en la celda (6 estados + insignias) o teclas **1–6**. Cajón **Badges**: arrastrar una insignia a una celda, o tocar una insignia y luego las celdas. |
+| Comparar dos puntos de vista | Marcar «Comparar» en 2 encabezados (o tocar el encabezado) y luego tocar un elemento: puestos, diferencias ↑↓, ausencias, líneas de unión. |
+| Comparar en el móvil | Seleccionar 2 columnas y luego **Comparar**: vista compacta lado a lado. |
+| Anotar en directo | Botón de estado en la celda (6 estados + insignias) o teclas **1–6**. Cajón **Insignias**: arrastrar una insignia a una celda, o tocar una insignia y luego las celdas. |
 | Mover una columna | Flechas ← → del encabezado, asa ✥ (arrastrar y soltar) o **Alt+←/→**. |
-| Modificar la cuadrícula | **Edit** (tecla E): doble clic en un texto, asa para reordenar (pulsación larga en el móvil, **Alt+↑/↓** con el teclado), **+** entre dos celdas, lápiz para el formulario completo. |
-| Cargar un archivo | File › Open, arrastrar un `.md` a la página o pegar Markdown (Ctrl+V): vista previa y avisos antes de reemplazar. |
-| Exportar | File › Export: nueva versión (`version` +1, `based_on`, `updated`), nuevo nombre de archivo; el original nunca se sobrescribe. |
-| Deshacer | Ctrl+Z durante la sesión; File › Version history para las versiones guardadas (copia automática antes de cada reemplazo). |
-| Compartir | File › Share link: enlace autónomo (`#z=`, cuadrícula comprimida en la URL) o enlace a un archivo en línea (`?src=`). |
+| Modificar la cuadrícula | **Editar** (tecla E): doble clic en un texto, asa para reordenar (pulsación larga en el móvil, **Alt+↑/↓** con el teclado), **+** entre dos celdas, lápiz para el formulario completo. |
+| Cargar un archivo | Archivo › Abrir un archivo .md…, arrastrar un `.md` a la página o pegar Markdown (Ctrl+V): vista previa y avisos antes de reemplazar. |
+| Exportar | Archivo › Exportar en Markdown…: nueva versión (`version` +1, `based_on`, `updated`), nuevo nombre de archivo; el original nunca se sobrescribe. |
+| Deshacer | Ctrl+Z durante la sesión; Archivo › Historial de versiones para las versiones guardadas (copia automática antes de cada reemplazo). |
+| Compartir | Archivo › Enlace para compartir…: enlace autónomo (`#z=`, cuadrícula comprimida en la URL) o enlace a un archivo en línea (`?src=`). |
 
-### Presentar sin sobrecargar (menú **Present**)
+### Presentar sin sobrecargar (menú **Presentar**)
 
 | Modo | Efecto |
 |---|---|
-| **Spotlight** (destacado) | Una sola columna activa, las demás en gris (un clic en una columna gris la destaca). En la columna, el elemento abierto resalta y los demás se atenúan. |
-| **Reveal › Progressive** (revelado progresivo) | Los elementos quedan borrosos y sin color de estado hasta que se tocan. |
-| **Reveal › From scratch** (desde cero) | Solo se ven el primer encabezado y la forma de las tarjetas; se revela con un clic o con **Next**. |
+| **Destacado** | Una sola columna activa, las demás en gris (un clic en una columna gris la destaca). En la columna, el elemento abierto resalta y los demás se atenúan. |
+| **Revelado › Progresivo** | Los elementos quedan borrosos y sin color de estado hasta que se tocan. |
+| **Revelado › Desde cero** | Solo se ven el primer encabezado y la forma de las tarjetas; se revela con un clic o con **Siguiente**. |
 
 ![Revelado progresivo: solo se ven los elementos ya tocados](visuels/es/captures/progressive-reveal-es.png)
 
-El botón **Next** sigue el orden elegido: columna por columna, puesto por puesto (todos los n.º 1, luego
-los n.º 2…) o elemento por elemento (un mismo elemento aparece en todas las columnas a la vez; «Spotlight»
-resalta entonces esa «fila»). Mando de presentación: **Av Pág / Re Pág** (o N / P). **Peek** muestra
+El botón **Siguiente** sigue el orden elegido: columna por columna, puesto por puesto (todos los n.º 1, luego
+los n.º 2…) o elemento por elemento (un mismo elemento aparece en todas las columnas a la vez; «Destacado»
+resalta entonces esa «fila»). Mando de presentación: **Av Pág / Re Pág** (o N / P). **Vistazo** muestra
 discretamente el paso siguiente; la **ventana del presentador** (para la pantalla del ordenador mientras
 se proyecta la cuadrícula) muestra todo el desarrollo, el paso siguiente con sus notas (detalles, estados,
 insignias) y controla la proyección. Estos modos nunca modifican el archivo.
@@ -101,13 +101,14 @@ insignias) y controla la proyección. Estos modos nunca modifican el archivo.
 | Parámetro | Efecto |
 |---|---|
 | `?src=https://…/cuadricula.md` | Carga un archivo en línea (mismo sitio, o sitio que permita CORS: GitHub «Raw»…). |
+| `?lang=es` / `?lang=en` / `?lang=fr` | Idioma de la interfaz (prioritario sobre la elección guardada y el idioma del navegador). |
 | `#z=…` | Cuadrícula completa comprimida en el enlace (generado por la aplicación). |
 | `?ex=courants-pedagogiques` / `?ex=ethiques-ia` / `?ex=voyage-fin-d-annee` | Abre un ejemplo. |
 | `&cols=id1,id2` | Preselecciona columnas para la comparación. |
 | `&compact=1` | Abre directamente la vista de comparación compacta. |
-| `&spot=1` | Abre en modo «Spotlight». |
+| `&spot=1` | Abre en modo «Destacado». |
 | `&stage=veil` / `&stage=zero` | Abre en revelado progresivo / desde cero. |
-| `&order=column` / `rank` / `element` | Orden del botón «Next». |
+| `&order=column` / `rank` / `element` | Orden del botón «Siguiente». |
 
 ## Formato de archivo
 
@@ -150,8 +151,8 @@ Las palabras clave del formato (`# Elements`, `# Perspectives`, `state:`, `badge
 ### Ancho de las columnas
 
 Por defecto, las columnas tienen un ancho pensado para tarjetas con texto. Para tarjetas muy cortas (el
-nombre de un país, una palabra), añade `columns: narrow` en el encabezado del archivo o elige «Narrow» en
-Edit › Title and introduction: las columnas son más estrechas y caben dos en la pantalla de un móvil.
+nombre de un país, una palabra), añade `columns: narrow` en el encabezado del archivo o elige «Estrechas» en
+Editar › Título e introducción: las columnas son más estrechas y caben dos en la pantalla de un móvil.
 `columns: wide` da columnas más anchas.
 
 ## Skills para Claude Code (desarrolladores)
@@ -180,7 +181,7 @@ index.html            aplicación (consulta + edición)
 css/app.css           estilos (mobile-first, temas claro/oscuro, estados accesibles)
 js/core/format.js     analizador, serializador, validador (navegador + Node)
 js/core/pg.js         utilidades, almacenamiento seguro, enlaces comprimidos, Markdown saneado
-js/core/i18n.js       todos los textos de la interfaz (fr, en)
+js/core/i18n.js       todos los textos de la interfaz (fr, en, es)
 js/core/samples.js    ejemplos integrados (generado)
 js/app/grid.js        renderizado, comparación, navegación con teclado, columnas
 js/app/edit.js        modo edición, formularios, arrastrar y soltar celdas

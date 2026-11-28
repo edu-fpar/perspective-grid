@@ -84,6 +84,7 @@ Télécommande de présentation : **Page suivante / Page précédente** (ou N / 
 | Paramètre | Effet |
 |---|---|
 | `?src=https://…/grille.md` | Charge un fichier en ligne (même site, ou site autorisant CORS : GitHub « Raw »…). |
+| `?lang=fr` / `?lang=en` / `?lang=es` | Langue de l’interface (prioritaire sur le choix enregistré et la langue du navigateur). |
 | `#z=…` | Grille complète compressée dans le lien (généré par l’application). |
 | `?ex=courants-pedagogiques` / `?ex=ethiques-ia` / `?ex=voyage-fin-d-annee` | Ouvre un exemple. |
 | `&cols=id1,id2` | Présélectionne des colonnes pour la comparaison. |
@@ -161,7 +162,7 @@ index.html            application (consultation + édition)
 css/app.css           styles (mobile-first, thèmes jour/nuit, états accessibles)
 js/core/format.js     parseur, sérialiseur, validateur (navigateur + Node)
 js/core/pg.js         utilitaires, stockage sûr, liens compressés, Markdown nettoyé
-js/core/i18n.js       tous les libellés de l’interface (fr, en)
+js/core/i18n.js       tous les libellés de l’interface (fr, en, es)
 js/core/samples.js    exemples intégrés (généré)
 js/app/grid.js        rendu, comparaison, navigation clavier, colonnes
 js/app/edit.js        mode édition, formulaires, glisser-déposer des cellules

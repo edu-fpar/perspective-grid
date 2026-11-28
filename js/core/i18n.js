@@ -1,6 +1,7 @@
 /*!
- * Interface translations (fr default, en). All UI strings live here.
- * Add a language: PG.i18n.add('es', { ... }, 'Español'). Missing keys fall back to French.
+ * Interface translations (fr default, en, es). All UI strings live here.
+ * Language: ?lang=fr|en|es in the address, else the saved choice, else the browser language.
+ * Add a language: PG.i18n.add('xx', { ... }, 'Name') + a data-lang button in index.html. Missing keys fall back to French.
  * DOM: data-i18n (text), data-i18n-html, data-i18n-title, data-i18n-aria (aria-label), data-i18n-placeholder.
  */
 (function (PG) {
@@ -16,6 +17,9 @@
   }
 
   function lang() {
+    var q = null;
+    try { q = new URLSearchParams(location.search).get('lang'); } catch (e) { /* ignore */ }
+    if (q && dict[q]) return q;
     var saved = PG.store.get('lang', null);
     if (saved && dict[saved]) return saved;
     var nav = (navigator.language || 'fr').slice(0, 2).toLowerCase();
@@ -384,4 +388,183 @@
     'st.offNote': 'No presentation mode is active in the main window (Present menu).',
     's.withStage': 'Open the link in the current presentation mode', 's.noStage': 'No presentation mode active'
   });
+})(window.PG);
+
+/* =================================================================== ES (interface + modes de présentation) */
+(function (PG) {
+  'use strict';
+  PG.i18n.add('es', {
+    'c.ok': 'Aceptar', 'c.cancel': 'Cancelar', 'c.close': 'Cerrar', 'c.save': 'Guardar', 'c.dateLocale': 'es-ES',
+
+    'a.brand': 'Miradas cruzadas', 'a.skip': 'Ir a la cuadrícula', 'a.mainNav': 'Barra principal',
+    'a.examples': 'Ejemplos', 'a.file': 'Archivo', 'a.load': 'Cargar una cuadrícula',
+    'a.openFile': 'Abrir un archivo .md…', 'a.pasteText': 'Pegar Markdown…', 'a.openUrl': 'Abrir desde una dirección…',
+    'a.export': 'Exportar en Markdown…', 'a.share': 'Enlace para compartir…', 'a.source': 'Ver / editar el Markdown',
+    'a.snapshot': 'Guardar una versión', 'a.history': 'Historial de versiones',
+    'a.edit': 'Editar', 'a.editTitle': 'Modo edición: mover, añadir, modificar (tecla E)',
+    'a.settings': 'Ajustes de visualización', 'a.theme': 'Tema', 'a.themeAuto': 'Auto', 'a.themeLight': 'Claro', 'a.themeDark': 'Oscuro',
+    'a.display': 'Visualización', 'a.prefPatterns': 'Tramas reforzadas (rayado según el estado)', 'a.prefLinks': 'Líneas de unión entre columnas', 'a.prefRanks': 'Números de puesto',
+    'a.language': 'Idioma de la interfaz', 'a.formatDoc': 'Documentación', 'a.withAi': 'Crear una cuadrícula con una IA…',
+    'a.about': 'Acerca de', 'a.warnTitle': 'Avisos de lectura', 'a.warnIntro': 'El archivo se ha cargado, pero algunos pasajes se han interpretado o ignorado:',
+    'a.warnClear': 'Entendido', 'a.saved': 'Guardado', 'a.editing': 'Editando…', 'a.storageFull': 'Almacenamiento local lleno: exporta tu cuadrícula',
+    'a.new': 'Nueva cuadrícula', 'a.newTitle': 'Nueva cuadrícula', 'a.newColumn': 'Punto de vista {n}',
+    'a.confirmNew': '¿Crear una cuadrícula vacía? La cuadrícula actual se guardará en el historial.',
+    'a.alreadyOpen': 'Este ejemplo ya está abierto.', 'a.exampleLoaded': 'Ejemplo cargado: {title}', 'a.linkLoaded': 'Cuadrícula abierta desde el enlace: {title}',
+    'a.nothingToUndo': 'No hay nada que deshacer.', 'a.undone': 'Cambio deshecho', 'a.redone': 'Cambio rehecho',
+    'a.editOn': 'Modo edición activado', 'a.editOff': 'Modo consulta', 'a.compactOn': 'Vista de comparación: solo se muestran las columnas seleccionadas',
+    'a.compactOff': 'Se muestran todas las columnas', 'a.selCleared': 'Selección borrada',
+
+    't.aria': 'Comparación', 't.selNone': 'Selecciona al menos 2 puntos de vista para compararlos', 't.selOne': 'Selecciona un 2.º punto de vista',
+    't.selNoneShort': 'Elige 2 columnas', 't.selOneShort': '1 columna más', 't.selN': '{n} puntos de vista comparados: toca un elemento',
+    't.all': 'Todas', 't.clear': 'Borrar', 't.compact': 'Comparar', 't.compactTitle': 'Mostrar solo las columnas seleccionadas, en una vista compacta',
+
+    'g.aria': 'Cuadrícula de puntos de vista', 'g.cellsAria': 'Elementos ordenados por {title}', 'g.compare': 'Comparar', 'g.selected': 'Seleccionada',
+    'g.selectHint': 'Selecciona esta columna para compararla', 'g.selectAria': 'Comparar «{title}»',
+    'g.moveLeft': 'Mover «{title}» a la izquierda', 'g.moveRight': 'Mover «{title}» a la derecha',
+    'g.moveLeftShort': 'Mover a la izquierda', 'g.moveRightShort': 'Mover a la derecha', 'g.dragCol': 'Arrastrar para mover la columna',
+    'g.colMenu': 'Acciones sobre «{title}»', 'g.colMenuShort': 'Acciones de la columna', 'g.selectForCompare': 'Seleccionar para comparar', 'g.unselect': 'Quitar de la comparación',
+    'g.moreDetail': 'Leer más', 'g.lessDetail': 'Mostrar menos',
+    'g.rankSr': 'Puesto {n}', 'g.stateSr': 'estado: {state}', 'g.badgesSr': 'insignias: {list}',
+    'g.stateBtn': 'Estado: {state} — cambiar (1 a 6)', 'g.stateBtnAria': 'Estado de «{title}»: {state}. Cambiar el estado o las insignias',
+    'g.stateHeader': 'Estado', 'g.cellMenuAria': 'Estado e insignias de la celda', 'g.defaultDesc': 'Descripción general del elemento',
+    'g.reference': 'Referencia · puesto {n}', 'g.rankGap': 'puesto {from} → puesto {to}', 'g.sameRank': 'mismo puesto ({n})',
+    'g.absent': '{title} no aparece en este punto de vista',
+    'g.srCompare': '{title}: {list}.', 'g.srRank': 'puesto {n} para {col}', 'g.srAbsent': 'ausente en {col}',
+    'g.srSame': 'mismo puesto', 'g.srLower': '{n} puesto(s) más abajo', 'g.srHigher': '{n} puesto(s) más arriba',
+    'g.srSelected': '{title} seleccionada. {n} columna(s) seleccionada(s).', 'g.srUnselected': '{title} quitada. {n} columna(s) seleccionada(s).',
+    'g.srStateSet': '{title}: estado {state}', 'g.srColMoved': '{title} movida a la posición {n} de {total}',
+    'g.empty': 'Esta cuadrícula aún no tiene ningún punto de vista.', 'g.emptyEdit': 'Añadir puntos de vista',
+
+    'state.default': 'Sin estado', 'state.primary': 'Destacado', 'state.success': 'Valorado', 'state.warning': 'Matizado, debatido',
+    'state.danger': 'Rechazado, opuesto', 'state.muted': 'Secundario, apartado',
+
+    'badge.central': 'central', 'badge.accepted': 'aceptado', 'badge.overvalued': 'sobrevalorado', 'badge.undervalued': 'infravalorado',
+    'badge.contested': 'discutido', 'badge.rejected': 'rechazado', 'badge.ignored': 'ignorado', 'badge.denied': 'negado', 'badge.instrumentalized': 'instrumentalizado',
+    'b.header': 'Insignias', 'b.drawer': 'Insignias', 'b.drawerTitle': 'Cajón de insignias', 'b.badgeAria': 'Insignia: {label}',
+    'b.helpMouse': 'Arrastra una insignia a una celda, o haz clic en una insignia y luego en las celdas que quieras anotar.',
+    'b.helpTouch': 'Toca una insignia y luego las celdas que quieras anotar. También puedes usar el botón de estado de una celda.',
+    'b.customHelp': 'Se pueden declarar más insignias en el encabezado del archivo (badges:).',
+    'b.armed': 'Toca celdas para añadir o quitar {badge}', 'b.disarm': 'Terminado', 'b.already': 'Esta insignia ya está en la celda.',
+    'b.srArmed': 'Insignia {label} lista: toca las celdas para anotarlas', 'b.srAdded': 'Insignia {label} añadida a {title}', 'b.srRemoved': 'Insignia {label} quitada de {title}',
+
+    'e.mode': 'Modo edición', 'e.barAria': 'Herramientas de edición', 'e.hint': 'Doble clic en un texto para editarlo · asa para mover · + para añadir',
+    'e.done': 'Terminado', 'e.undo': 'Deshacer', 'e.redo': 'Rehacer', 'e.undoTitle': 'Deshacer (Ctrl+Z)', 'e.redoTitle': 'Rehacer (Ctrl+Y)',
+    'e.docProps': 'Título e introducción', 'e.addColumn': 'Añadir un punto de vista', 'e.editColumn': 'Editar el punto de vista', 'e.newColumn': 'Nuevo punto de vista',
+    'e.addCell': 'Añadir un elemento', 'e.addCellAt': 'Añadir un elemento en la posición {n}', 'e.addSpacer': 'Añadir una casilla vacía (alineación)',
+    'e.editCell': 'Editar', 'e.editCellAria': 'Editar «{title}»', 'e.deleteCell': 'Eliminar', 'e.moveUp': 'Subir', 'e.moveDown': 'Bajar',
+    'e.duplicateColumn': 'Duplicar la columna', 'e.deleteColumn': 'Eliminar la columna', 'e.copyOf': '{title} (copia)',
+    'e.drag': 'Arrastrar para mover (o Alt+↑/↓)', 'e.spacer': 'Casilla vacía', 'e.spacerMenu': 'Acciones de la casilla vacía',
+    'e.inlineAria': 'Editar el texto (Intro para confirmar, Escape para cancelar)', 'e.saved': 'Cambio guardado',
+    'e.newCellIn': 'Nuevo elemento en «{title}» (posición {n})', 'e.editCellIn': 'Elemento de «{title}»',
+    'e.title': 'Título', 'e.titlePh': 'p. ej. El papel del error', 'e.titleHelp': 'Déjalo vacío para usar el título común: «{title}».',
+    'e.key': 'Clave (identificador común)', 'e.keyAuto': 'Generada a partir del título. Elige una clave existente para enlazar este elemento con otras columnas.',
+    'e.keyNew': 'Elemento nuevo: se podrá reutilizar en otras columnas.', 'e.keyCatalog': 'Elemento del catálogo.',
+    'e.keyShared': 'Mismo elemento que en: {list}.', 'e.keyDup': 'Esta clave ya se usa en esta columna.', 'e.alreadyInColumn': 'ya está en esta columna',
+    'e.badKey': 'Clave no válida.', 'e.needTitle': 'Escribe un título.', 'e.state': 'Estado', 'e.detail': 'Detalle para este punto de vista', 'e.detailPh': 'Lo que significa este elemento para este punto de vista…',
+    'e.mdHelp': 'Se acepta Markdown: **negrita**, *cursiva*, listas, enlaces.', 'e.catalog': 'Elemento común (compartido por todas las columnas)',
+    'e.catalogHelp': 'Este título y esta descripción se aplican allí donde el elemento no tiene texto propio.',
+    'e.catalogTitle': 'Título común', 'e.catalogDetail': 'Descripción general', 'e.add': 'Añadir', 'e.cellAdded': 'Elemento añadido', 'e.columnAdded': 'Punto de vista añadido',
+    'e.colTitle': 'Título', 'e.colId': 'Identificador', 'e.auto': 'automático', 'e.colSubtitle': 'Subtítulo', 'e.colSubtitlePh': 'p. ej. autores, época',
+    'e.colSummary': 'Descripción breve (encabezado)', 'e.colDetail': 'Descripción detallada (desplegable)',
+    'e.docTitle': 'Título de la cuadrícula', 'e.docSubtitle': 'Subtítulo', 'e.docLang': 'Idioma', 'e.docIntro': 'Introducción (botón «Acerca de»)',
+    'e.docAuthor': 'Autor', 'e.docSource': 'Fuente', 'e.docVersion': 'Versión {v} · basada en: {based} · actualizada: {updated}',
+    'e.confirmDeleteCell': '¿Eliminar «{title}» de «{col}»?', 'e.confirmDeleteColumn': '¿Eliminar el punto de vista «{title}» y sus {n} celdas?',
+    'e.cellDeleted': '«{title}» eliminado.', 'e.columnDeleted': '«{title}» eliminado.',
+    'e.srMoved': '{title}: puesto {n} de {total}',
+
+    'k.title': 'Atajos de teclado', 'k.enter': 'Intro / Espacio', 'k.esc': 'Esc', 'k.nav': 'Moverse entre celdas (mismo elemento en la columna siguiente)', 'k.toggle': 'Desplegar el detalle y comparar',
+    'k.states': 'Cambiar el estado de la celda', 'k.menu': 'Menú de estado e insignias', 'k.escape': 'Dejar de comparar, cerrar un menú',
+    'k.moveCol': 'Mover la columna', 'k.edit': 'Entrar / salir del modo edición', 'k.moveCell': 'Subir / bajar la celda (modo edición)',
+    'k.editCell': 'Editar la celda (modo edición)', 'k.del': 'Supr', 'k.deleteCell': 'Eliminar la celda (modo edición)', 'k.undo': 'Deshacer / rehacer',
+    'k.snapshot': 'Guardar una versión', 'k.help': 'Mostrar esta ayuda', 'k.note': 'Estados: 1 ninguno · 2 destacado · 3 valorado · 4 matizado · 5 rechazado · 6 secundario.',
+
+    'h.title': 'Historial de versiones', 'h.intro': 'Versiones guardadas en este navegador. Antes de reemplazar la cuadrícula se hace una copia automática.',
+    'h.empty': 'Aún no hay ninguna versión.', 'h.emptyHint': 'Archivo › Guardar una versión, o Ctrl+S.', 'h.auto': 'Copia automática',
+    'h.stats': '{p} columnas · {c} celdas', 'h.identical': 'Igual que la cuadrícula abierta', 'h.diff': '{add} / {del} líneas respecto a la cuadrícula abierta',
+    'h.restore': 'Restaurar', 'h.rename': 'Renombrar', 'h.download': 'Descargar', 'h.delete': 'Eliminar',
+    'h.confirmRestore': '¿Restaurar «{label}»? Antes se guardará una copia de la cuadrícula actual.', 'h.restored': 'Versión restaurada.',
+    'h.renamePrompt': 'Nuevo nombre de la versión:', 'h.confirmDelete': '¿Eliminar definitivamente la versión «{label}»?',
+    'h.snapTitle': 'Guardar una versión', 'h.snapPrompt': 'Nombre de esta versión:', 'h.snapDefault': 'Versión del {date}', 'h.saved': 'Versión «{label}» guardada.',
+    'h.full': 'Almacenamiento local lleno: elimina versiones o exporta la cuadrícula.', 'h.unnamed': 'Versión sin nombre',
+    'h.beforeRestore': 'Antes de restaurar «{label}»', 'h.beforeImport': 'Antes de importar {name}', 'h.beforeExample': 'Antes del ejemplo «{title}»',
+    'h.beforeNew': 'Antes de la nueva cuadrícula', 'h.beforeLink': 'Antes de abrir un enlace', 'h.exported': 'Exportación v{v}',
+
+    'i.title': 'Cargar una cuadrícula', 'i.tab.file': 'Archivo', 'i.tab.paste': 'Pegar', 'i.tab.url': 'Dirección',
+    'i.drop': 'Arrastra y suelta aquí un archivo <strong>.md</strong> o <u>búscalo</u>', 'i.dropRelease': 'Suelta el archivo para verlo',
+    'i.pasteLabel': 'Markdown que importar', 'i.pastePh': 'Pega aquí el Markdown de una cuadrícula (formato perspective-grid/v1)…',
+    'i.urlLabel': 'Dirección de un archivo .md en línea', 'i.urlHelp': 'El sitio debe permitir que otras páginas lo lean (CORS), como GitHub (enlace «Raw»).',
+    'i.fetch': 'Cargar', 'i.loading': 'Cargando…', 'i.apply': 'Reemplazar la cuadrícula actual', 'i.applySource': 'Aplicar los cambios',
+    'i.stats': '{p} puntos de vista · {c} celdas · {e} elementos, {sh} de ellos en varias columnas.',
+    'i.warnings': '{n} aviso(s) de lectura', 'i.noWarning': 'Archivo leído sin avisos.', 'i.line': 'Línea {n}:',
+    'i.miniAria': 'Vista previa de la cuadrícula', 'i.nothing': 'No se ha encontrado ningún punto de vista: revisa el formato («# Perspectives» y luego «## Título {#id}»).',
+    'i.badFile': 'Este archivo no es un archivo de texto ni Markdown (.md).', 'i.pasted': 'texto pegado',
+    'i.loaded': 'Cuadrícula cargada: {title}', 'i.sourceApplied': 'Markdown aplicado.',
+    'i.errTitle': 'No se puede abrir esta cuadrícula', 'i.errShowing': 'En su lugar se muestra tu última cuadrícula.',
+    'i.errFetch': 'No se ha podido cargar el archivo ({detail}).', 'i.errCors': 'Puede que el sitio que aloja este archivo no permita que otras páginas lo lean (CORS).',
+    'i.errFile': 'Esta página debe abrirse desde un servidor web (http://…) para cargar un archivo en línea.',
+    'i.errLink': 'Este enlace está incompleto o dañado. Pide a quien lo compartió que lo vuelva a copiar.',
+    'i.errUnsupported': 'Este navegador no puede leer este enlace comprimido. Prueba una versión reciente de Chrome, Edge, Firefox o Safari.',
+    'i.errExample': 'Ejemplo desconocido: «{id}».',
+
+    'w.no-front-matter': 'Falta el encabezado (--- … ---) al principio del archivo.', 'w.unclosed-front-matter': 'El encabezado no se cierra con una línea «---».',
+    'w.bad-front-matter-line': 'Línea de encabezado ilegible: «{text}».', 'w.bad-badge-definition': 'Definición de insignia ilegible: «{text}» (se esperaba «clave: icono | Etiqueta»).',
+    'w.unknown-format': 'Formato «{value}» desconocido (se esperaba: perspective-grid/v1).', 'w.bad-version': 'La versión «{value}» no es un número entero: se usa 1.',
+    'w.no-title': 'La cuadrícula no tiene título.', 'w.no-perspectives': 'No se ha encontrado ningún punto de vista («# Perspectives» y luego «## Título {#id}»).',
+    'w.unknown-section': 'Sección desconocida «# {title}»: se ignora su contenido.', 'w.heading-before-section': 'Título «{title}» fuera de las secciones «# Elements» / «# Perspectives»: ignorado.',
+    'w.ignored-text': 'Texto fuera de cualquier elemento, punto de vista o celda: ignorado.', 'w.element-no-key': 'El elemento «{title}» no tiene [clave]: se usa «{key}».',
+    'w.element-no-title': 'El elemento [{key}] no tiene título.', 'w.duplicate-element': 'El elemento [{key}] está definido dos veces: se ignora la segunda definición.',
+    'w.bad-key': 'Clave no válida «{key}».', 'w.duplicate-perspective': 'El identificador «{id}» se usa dos veces: renombrado «{next}».',
+    'w.cell-outside-perspective': 'Celda situada antes de cualquier punto de vista: ignorada.', 'w.cell-no-key': 'La celda «{title}» no tiene [clave]: se usa «{key}».',
+    'w.spacer-content-ignored': 'Una casilla vacía [-] no puede tener título ni detalle: se ignoran.',
+    'w.unknown-state': 'Estado «{value}» desconocido (posibles: {allowed}): se usa «default».',
+    'w.unknown-badge': 'Insignia «{value}» desconocida: declárala en el encabezado (badges:) para darle un icono y una etiqueta.',
+    'w.duplicate-in-column': 'La clave [{key}] aparece dos veces en «{perspective}»: la comparación usa la primera.',
+    'w.unknown-key': 'La clave [{key}] no está en el catálogo y la celda no tiene título: se ha creado un elemento.',
+    'w.unknown-columns': 'Ancho de columnas «{value}» desconocido (posibles: {allowed}): se usa el ancho normal.',
+
+    'x.title': 'Exportar en Markdown', 'x.intro': 'El archivo exportado es una nueva versión: el original nunca se sobrescribe.',
+    'x.version': 'Versión', 'x.basedOn': 'Basada en', 'x.updated': 'Fecha', 'x.file': 'Nombre del archivo',
+    'x.adopt': 'Seguir trabajando en esta nueva versión (y añadirla al historial)', 'x.preview': 'Vista previa del Markdown',
+    'x.copy': 'Copiar', 'x.download': 'Descargar', 'x.copied': 'Markdown copiado en el portapapeles.', 'x.copyFailed': 'No se ha podido copiar: selecciona el texto y cópialo.',
+    'x.done': '{file} descargado.',
+
+    's.title': 'Compartir la cuadrícula', 's.withSelection': 'Abrir el enlace con las {n} columnas seleccionadas (y la vista actual)',
+    's.noSelection': 'Selecciona al menos 2 columnas para abrir el enlace directamente en comparación',
+    's.embedTitle': 'Enlace autónomo', 's.embedIntro': 'Toda la cuadrícula va comprimida en el enlace: no se envía nada a ningún servidor. Ideal para un código QR o un mensaje, siempre que la cuadrícula sea corta.',
+    's.srcTitle': 'Enlace a un archivo en línea', 's.srcIntro': 'Sube el archivo .md a un sitio público (GitHub, aula virtual, servidor del centro) y pega su dirección: el enlace mostrará siempre la última versión del archivo.',
+    's.srcLabel': 'Dirección del archivo .md', 's.copy': 'Copiar el enlace', 's.open': 'Abrir', 's.copied': 'Enlace copiado.',
+    's.length': 'Longitud: {n} caracteres.', 's.long': 'Enlace muy largo: algunas aplicaciones de mensajería lo cortarán. Mejor un enlace a un archivo en línea.',
+    's.unsupported': 'Este navegador no puede comprimir enlaces.',
+    'e.docColumns': 'Ancho de las columnas', 'e.docColumnsHelp': 'Estrechas: para tarjetas muy cortas (una palabra, un nombre).',
+    'e.cols.narrow': 'Estrechas', 'e.cols.normal': 'Normales', 'e.cols.wide': 'Anchas',
+
+    'k.pages': 'Av Pág / Re Pág', 'k.stage': 'Presentación: revelar lo siguiente / volver', 'st.menu': 'Presentar', 'st.menuTitle': 'Modos de presentación: destacado, revelado progresivo',
+    'st.spot': 'Destacado', 'st.spotHelp': 'Una sola columna activa, las demás en gris; dentro de ella, el elemento abierto resalta.',
+    'st.reveal': 'Revelado', 'st.revealOff': 'Todo visible',
+    'st.revealVeil': 'Progresivo', 'st.revealVeilHelp': 'Los elementos quedan atenuados hasta que se tocan.',
+    'st.revealZero': 'Desde cero', 'st.revealZeroHelp': 'Solo se ven el primer encabezado y la forma de las tarjetas.',
+    'st.order': 'Orden del botón «Siguiente»', 'st.orderColumn': 'Columna por columna', 'st.orderRank': 'Puesto por puesto (todos los n.º 1, luego los n.º 2…)',
+    'st.orderElement': 'Elemento por elemento (un elemento en todas las columnas)',
+    'st.presenter': 'Ventana del presentador', 'st.keysHelp': 'Mando: Av Pág / Re Pág (o N / P).',
+    'st.barAria': 'Controles de presentación', 'st.prev': 'Anterior', 'st.prevTitle': 'Volver atrás (Re Pág)',
+    'st.next': 'Siguiente', 'st.nextCol': 'Columna siguiente', 'st.nextTitle': 'Revelar lo siguiente (Av Pág)',
+    'st.peek': 'Vistazo', 'st.peekTitle': 'Mostrar discretamente lo que viene después (para el presentador)',
+    'st.reset': 'Empezar de nuevo', 'st.all': 'Revelar todo', 'st.exit': 'Salir de la presentación',
+    'st.progress': '{done} / {total} revelados', 'st.focusProgress': '{col} · {n} / {total}',
+    'st.nextIs': 'Después: {label}', 'st.allDone': 'Todo está revelado.',
+    'st.colStep': 'Punto de vista: {col}', 'st.headStep': 'Encabezado: {col}', 'st.cellStep': '{col} · puesto {n} · {title}',
+    'st.headersStep': 'Los encabezados de todos los puntos de vista', 'st.rankStep': 'Puesto {n} en cada punto de vista',
+    'st.elementStep': 'Elemento: {title} ({n} punto(s) de vista)',
+    'st.veiledSr': 'Elemento atenuado, puesto {n}: actívalo para revelarlo', 'st.maskedSr': 'Elemento oculto, puesto {n}: actívalo para revelarlo',
+    'st.maskedHeadSr': 'Punto de vista oculto n.º {n}: actívalo para revelarlo',
+    'st.srRevealed': 'Revelado: {label}', 'st.srHidden': 'Último revelado deshecho', 'st.srFocus': 'Destacado: {col}',
+    'st.noChannel': 'Este navegador no puede sincronizar una ventana del presentador.',
+    'st.popupBlocked': 'Se ha bloqueado la ventana del presentador: permite las ventanas emergentes para este sitio.',
+    'st.presenterTitle': 'Vista del presentador', 'st.waiting': 'Conectando con la ventana de presentación…',
+    'st.noMain': 'No se ha encontrado ninguna ventana de presentación: abre la cuadrícula en otra pestaña de este navegador y activa un modo de presentación.',
+    'st.upNext': 'Lo siguiente', 'st.justShown': 'Recién revelado', 'st.plan': 'Guion', 'st.overview': 'Vista de conjunto (en gris = aún oculto)',
+    'st.editingNote': 'La ventana principal está en modo edición: los efectos de presentación están en pausa.',
+    'st.offNote': 'No hay ningún modo de presentación activo en la ventana principal (menú Presentar).',
+    's.withStage': 'Abrir el enlace en el modo de presentación actual', 's.noStage': 'Ningún modo de presentación activo'
+  }, 'Español');
 })(window.PG);
