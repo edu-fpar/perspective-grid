@@ -1,5 +1,7 @@
 # Regards croisés (`perspective-grid`)
 
+*[English version](README.en.md)* · *[Versión en español](README.es.md)*
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24508193.svg)](https://doi.org/10.5281/zenodo.24508193)
 
 Outil pédagogique qui montre **comment plusieurs points de vue hiérarchisent différemment un même ensemble
